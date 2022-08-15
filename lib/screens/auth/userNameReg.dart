@@ -65,8 +65,8 @@ class _UserNameRegState extends State<UserNameReg> {
                   if (value!.isEmpty) {
                     return 'لا تترك هذا الحقل فارغا';
                   }
-                  if (value.length < 5) {
-                    return "يجب ان لا يقل اسم المستخدم عن خمسة حروف";
+                  if (value.length < 4) {
+                    return "يجب ان لا يقل اسم المستخدم عن أربعة حروف";
                   }
                 },
                 decoration: InputDecoration(

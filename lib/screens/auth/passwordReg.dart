@@ -17,6 +17,14 @@ class PasswordRegistration extends StatefulWidget {
 class _PasswordRegistrationState extends State<PasswordRegistration> {
   TextEditingController passwordC = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+    bool _showPassword = false;
+     void _togglevisibility() {
+    setState(() {
+      _showPassword = !_showPassword;
+    });
+  }
+
+
 @override
   void initState() {
     if (Provider.of<AuthProvider>(context, listen: false).password != null) {
@@ -56,6 +64,9 @@ class _PasswordRegistrationState extends State<PasswordRegistration> {
             ),
             SizedBox(
               child: TextFormField(
+                                                 obscureText: !_showPassword,
+                                                 
+
                 controller: passwordC, validator: (value) {
                   if (value!.isEmpty) {
                     return 'لا تترك هذا الحقل فارغا';
@@ -66,6 +77,14 @@ class _PasswordRegistrationState extends State<PasswordRegistration> {
                 },
 
                 decoration: InputDecoration(
+                     suffixIcon: GestureDetector(
+                                    onTap: () {
+                                      _togglevisibility();
+                                    },
+                                    child: Icon(
+                                      _showPassword ? Icons.visibility : Icons
+                                          .visibility_off, color: Colors.grey,size: 15.sp,),
+                                  ),
                     contentPadding:
                         EdgeInsets.symmetric(vertical: 0, horizontal: 2.w),
                     enabledBorder: OutlineInputBorder(

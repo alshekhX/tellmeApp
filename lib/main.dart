@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 import 'package:tell_me/provider/auth.dart';
 import 'package:tell_me/provider/likesprovider.dart';
@@ -10,20 +13,14 @@ import 'package:tell_me/screens/auth/userNameReg.dart';
 import 'package:tell_me/screens/home_Page.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
-
-
-
-
+import 'package:tell_me/screens/splashScreen.dart';
 
 void main() {
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(create: (context) => QuestionProvider()),
-        ChangeNotifierProvider(create: (context) => RecordProvider()),
-                ChangeNotifierProvider(create: (context) => AuthProvider()),
-                                ChangeNotifierProvider(create: (context) => LikesProvider()),
-
-
-
+    ChangeNotifierProvider(create: (context) => RecordProvider()),
+    ChangeNotifierProvider(create: (context) => AuthProvider()),
+    ChangeNotifierProvider(create: (context) => LikesProvider()),
   ], child: MyApp()));
 }
 
@@ -36,24 +33,21 @@ class MyApp extends StatelessWidget {
     // ignore: prefer_const_constructors
     return Sizer(builder: (context, orientation, deviceType) {
       return MaterialApp(
-            localizationsDelegates: AppLocalizations.localizationsDelegates,
-            supportedLocales: AppLocalizations.supportedLocales,
-            locale: const Locale('ar'),
-             theme: ThemeData(
-               textSelectionTheme: TextSelectionThemeData(
-          cursorColor: Color(0xff00C6AB),
-          selectionColor: Color(0xffC7DAE3),
-          selectionHandleColor: Color(0xff37474F)
-        ),
-              textTheme: GoogleFonts.vazirmatnTextTheme().apply(
-                bodyColor:  Color(0xff212427),
-                
-              ),
-                primaryColor: Colors.white,
-
-                appBarTheme: AppBarTheme(
-                  backgroundColor: Colors.white,
-                )),
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        locale: const Locale('ar'),
+        theme: ThemeData(
+            textSelectionTheme: TextSelectionThemeData(
+                cursorColor: Color(0xff00C6AB),
+                selectionColor: Color(0xffC7DAE3),
+                selectionHandleColor: Color(0xff37474F)),
+            textTheme: GoogleFonts.vazirmatnTextTheme().apply(
+              bodyColor: Color(0xff212427),
+            ),
+            primaryColor: Colors.white,
+            appBarTheme: AppBarTheme(
+              backgroundColor: Colors.white,
+            )),
         title: 'Tell Me',
         home: MyHomePage(),
       );
@@ -78,11 +72,8 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
-
-
-
-
+  bool alredyLogged = false;
+  SharedPreferences? prefs;
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
@@ -91,7 +82,72 @@ class _MyHomePageState extends State<MyHomePage> {
     // The Flutter framework has been optimized to make rerunning build methods
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
-    return LoginScreen();
+    return Scaffold(
+      body: FutureBuilder(
+        future: verifyuserToken(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            if (alredyLogged == true) {
+              return HomePage();
+            } else
+              return LoginScreen();
+          } else {
+            return SplashScreen();
+          }
+        },
+      ),
+    );
+    ;
     // This trailing comma makes auto-formatting nicer for build methods.
+  }
+
+  verifyuserToken() async {
+    try {
+      Timer(const Duration(seconds: 2), () async{
+        
+      });
+      prefs = await SharedPreferences.getInstance();
+
+      // if (prefs!.getString('username') != null) {
+      //   print((prefs!.getString('username')));
+
+      //   Provider.of<AuthProvider>(context, listen: false).user =
+      //       MainUser(name: prefs!.getString('username'));
+      //   print(Provider.of<AuthProvider>(context, listen: false).user!.name);
+      // }
+      // if (prefs!.getString('userid') != null) {
+      //   Provider.of<AuthProvider>(context, listen: false).user!.id =
+      //       prefs!.getString('userid');
+
+      //   print(Provider.of<AuthProvider>(context, listen: false).user!.name);
+      // }
+
+      if (prefs!.getString('userToken') != null) {
+        Provider.of<AuthProvider>(context, listen: false).token =
+            prefs!.getString('userToken')!;
+        String res = await Provider.of<AuthProvider>(context, listen: false)
+            .getUserData();
+
+        if (res == 'success') {
+          alredyLogged = true;
+        } else {
+             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  duration: Duration(seconds: 2),
+                  backgroundColor: Colors.redAccent,
+                  content: Text("تأكد من تشغيل البيانات",
+                      style: GoogleFonts.tajawal(
+                          fontSize: 12.sp,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w400)),
+                ));
+          alredyLogged = false;
+          
+        }
+      } else {
+        alredyLogged = false;
+      }
+    } catch (e) {
+      alredyLogged = false;
+    }
   }
 }

@@ -54,7 +54,7 @@ class AuthProvider with ChangeNotifier {
   registerUser(String userName, String password) async {
     var dio = Dio(options);
     final url = '/api/v1/auth/register';
-   
+
     try {
       Response response = await dio.post(url, data: {
         "username": userName,
@@ -80,10 +80,13 @@ class AuthProvider with ChangeNotifier {
 
     dio.options.headers["authorization"] = 'Bearer $token';
     Response response = await dio.post('/api/v1/auth/me');
-
-    final data = response.data['data'];
-    user = User.fromMap(data);
-    notifyListeners();
-    print(user!.id);
+    if (response.statusCode == 200) {
+      final data = response.data['data'];
+      user = User.fromMap(data);
+      notifyListeners();
+      return 'success';
+    } else {
+      return 'false';
+    }
   }
 }

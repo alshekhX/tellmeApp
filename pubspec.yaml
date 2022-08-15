@@ -47,6 +47,7 @@ dependencies:
   just_audio: ^0.9.28
   lottie: ^1.2.2
   dio: ^4.0.0
+
   ndialog: ^4.1.0
   flutter_animated_button: ^2.0.0
   top_snackbar_flutter: ^1.0.0

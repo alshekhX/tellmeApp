@@ -26,6 +26,12 @@ class _ConfirmPassWordState extends State<ConfirmPassWord> {
   TextEditingController confirmPasswordC = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   bool? _isConnected;
+    bool _showPassword = false;
+     void _togglevisibility() {
+    setState(() {
+      _showPassword = !_showPassword;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,6 +66,8 @@ class _ConfirmPassWordState extends State<ConfirmPassWord> {
             SizedBox(
               child: TextFormField(
                 controller: confirmPasswordC,
+                                                                 obscureText: !_showPassword,
+
                 validator: (value) {
                   if (value!.isEmpty) {
                     return 'لا تترك هذا الحقل فارغا';
@@ -70,6 +78,14 @@ class _ConfirmPassWordState extends State<ConfirmPassWord> {
                   }
                 },
                 decoration: InputDecoration(
+                     suffixIcon: GestureDetector(
+                                    onTap: () {
+                                      _togglevisibility();
+                                    },
+                                    child: Icon(
+                                      _showPassword ? Icons.visibility : Icons
+                                          .visibility_off, color: Colors.grey,size: 15.sp,),
+                                  ),
                     contentPadding:
                         EdgeInsets.symmetric(vertical: 0, horizontal: 2.w),
                     enabledBorder: OutlineInputBorder(
@@ -170,7 +186,7 @@ class _ConfirmPassWordState extends State<ConfirmPassWord> {
                             showTopSnackBar(
                               context,
                               CustomSnackBar.error(
-                                message: "$res خطأ في التسجيل",
+                                message: " خطأ في التسجيل, حاول مجددا",
                               ),
                             );
                           }
@@ -180,7 +196,7 @@ class _ConfirmPassWordState extends State<ConfirmPassWord> {
                           showTopSnackBar(
                             context,
                             CustomSnackBar.error(
-                              message: "$e",
+                                    message: "الخادم مشغول , الرجاء المحاولة مجددا",
                             ),
                           );
                         }
