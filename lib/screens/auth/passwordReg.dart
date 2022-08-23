@@ -111,7 +111,7 @@ class _PasswordRegistrationState extends State<PasswordRegistration> {
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(Icons.swipe_right_alt),
+                      Icon(Icons.arrow_left_outlined),
                       Text(
                         'التالي',
                         style: TextStyle(
@@ -144,7 +144,7 @@ class _PasswordRegistrationState extends State<PasswordRegistration> {
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(Icons.swipe_left_alt),
+                      Icon(Icons.arrow_right_outlined),
                       Text(
                         'رجوع',
                         style: TextStyle(

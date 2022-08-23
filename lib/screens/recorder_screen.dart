@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -22,6 +23,7 @@ import 'package:tell_me/provider/recordsProvider.dart';
 import 'package:tell_me/screens/auth/login.dart';
 import 'package:tell_me/screens/classes/colors.dart';
 import 'package:tell_me/screens/home_Page.dart';
+import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
 import '../provider/auth.dart';
 
@@ -43,9 +45,33 @@ class _RecorderScreenState extends State<RecorderScreen> {
   void initState() {
     iniRecorder();
     updateUserNotification();
+    
+
+    recorderTut();
 
     // TODO: implement initState
     super.initState();
+  }
+
+  void recorderTut() async{
+       SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (prefs.getInt('recorderT') == null) {
+      createTutorial();
+    Future.delayed(Duration(seconds: 2), showTutorial);
+      prefs.setInt('recorderT', 1);
+    }
+    else if(prefs.getInt('recorderT')==1){
+createTutorial();
+    Future.delayed(Duration(seconds: 2), showTutorial);
+      prefs.setInt('recorderT', 2);
+
+    }
+    else if(prefs.getInt('recorderT')==2){
+
+
+    }
+    // createTutorial();
+    // Future.delayed(Duration(seconds: 2), showTutorial);
   }
 
   updateUserNotification() async {
@@ -53,6 +79,47 @@ class _RecorderScreenState extends State<RecorderScreen> {
     //     await Provider.of<QuestionProvider>(context, listen: false).token!;
     await Provider.of<AuthProvider>(context, listen: false).getUserData();
   }
+
+
+
+
+
+  
+
+  void showTutorial() {
+    tutorialCoachMark!.show(context: context);
+  }
+
+  TutorialCoachMark? tutorialCoachMark;
+    void createTutorial() {
+    tutorialCoachMark = TutorialCoachMark(
+      targets: _createTargets(),
+      colorShadow: Colors.grey.shade900,
+      textSkip: "تخطي التعليمات",
+      paddingFocus: 0,
+      opacityShadow: 0.8,
+      onFinish: () {
+        print("finish");
+      },
+      onClickTarget: (target) {
+        print('onClickTarget: $target');
+        tutorialCoachMark!.next();
+      },
+      onClickTargetWithTapPosition: (target, tapDetails) {
+        print("target: $target");
+        print(
+            "clicked at position local: ${tapDetails.localPosition} - global: ${tapDetails.globalPosition}");
+      },
+      onClickOverlay: (target) {
+        tutorialCoachMark!.next();
+        print('onClickOverlay: $target');
+      },
+      onSkip: () {
+        print("skip");
+      },
+    );
+  }
+
 
   @override
   void dispose() {
@@ -62,11 +129,43 @@ class _RecorderScreenState extends State<RecorderScreen> {
     super.dispose();
   }
 
+
+
   @override
   Widget build(BuildContext context) {
+    final user = Provider.of<AuthProvider>(context, listen: false).user;
     return WillPopScope(
-      onWillPop: () {
-        return Future.value(false); // if true allow back else block it
+      onWillPop: () async{
+        return await NAlertDialog(
+          dialogStyle: DialogStyle(titleDivider: false),
+          title: Text(
+            "تاكيد الخروج",
+            style:
+                GoogleFonts.tajawal(color: Colorss.dialogtext, fontSize: 16.sp),
+          ),
+          content: Text(
+            " هل تريد الخروج من البرنامج؟",
+            style:
+                GoogleFonts.tajawal(color: Colorss.dialogtext, fontSize: 16.sp),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text(
+                "نعم",
+                style: GoogleFonts.tajawal(
+                    color: Color.fromARGB(247, 78, 162, 120)),
+              ),
+              onPressed: () => Navigator.pop(context, true),
+            ),
+            TextButton(
+              child: Text(
+                "إلغاء",
+                style: GoogleFonts.tajawal(color: Color(0xff00A4EA)),
+              ),
+              onPressed: () => Navigator.pop(context, false),
+            ),
+          ],
+        ).show(context);
       },
       child: Scaffold(
         backgroundColor: Colorss.recorderBackground,
@@ -84,8 +183,10 @@ class _RecorderScreenState extends State<RecorderScreen> {
                                 builder: (context, userLikesProvider, _) {
                                   List<Record> likes =
                                       userLikesProvider.user!.records!;
-                                  List<FocusedMenuItem> likesWidget = likes
-                                      .map(
+                                  List<FocusedMenuItem> likesWidget = likes.where((element) => element.likes!=0).toList().
+                                  
+                                  
+                                      map(
                                         (e) => FocusedMenuItem(
                                             title: RichText(
                                               text: TextSpan(
@@ -127,7 +228,7 @@ class _RecorderScreenState extends State<RecorderScreen> {
                                             // ),
                                             trailingIcon: Icon(
                                                 Ionicons.heart_circle,
-                                                color: Color(0xff836F81)),
+                                                color: Color.fromRGBO(131, 111, 129, 1)),
                                             onPressed: () {
                                               Navigator.push(
                                                   context,
@@ -146,13 +247,13 @@ class _RecorderScreenState extends State<RecorderScreen> {
                                     FocusedMenuItem(
                                         title: RichText(
                                           text: TextSpan(
-                                              text: 'تسجيل الخروج',
-                                              style: GoogleFonts.tajawal(
-                                            color: Colors.grey.shade700,
-                                                fontSize: 11.sp,
-                                                fontWeight: FontWeight.bold,
-                                              ),
+                                            text: 'تسجيل الخروج',
+                                            style: GoogleFonts.tajawal(
+                                              color: Colors.grey.shade700,
+                                              fontSize: 11.sp,
+                                              fontWeight: FontWeight.bold,
                                             ),
+                                          ),
                                         ),
 
                                         //  Text(
@@ -162,59 +263,71 @@ class _RecorderScreenState extends State<RecorderScreen> {
                                         trailingIcon: Icon(
                                             Ionicons.log_out_outline,
                                             color: Colors.grey.shade700),
-                                        onPressed: ()async {   await NDialog(
-                      dialogStyle: DialogStyle(titleDivider: true),
-                      title: Text('تسجيل الخروج',
-                          style: TextStyle(
-                              fontSize: 14.sp,
-                              color: Color(0xff707070),
-                              fontWeight: FontWeight.w600)),
-                      content: Text(
-                           "هل تريد الخروج؟",
-                          style: TextStyle(
-                              fontSize: 11.sp,
-                              color: Color(0xff707070),
-                              fontWeight: FontWeight.w600)),
-                      actions: <Widget>[
-                        TextButton(
-                            child: Text('نعم',
-                                style: TextStyle(
-                                    fontSize: 11.sp,
-                                    color: Color(0xff707070),
-                                    fontWeight: FontWeight.w600)),
-                            onPressed: () async {
-                              SharedPreferences prefs =
-                                  await SharedPreferences.getInstance();
-                           
-                              prefs.remove('userToken');
-                              Provider.of<AuthProvider>(context, listen: false)
-                                  .user = null;
-                              
+                                        onPressed: () async {
+                                          await NDialog(
+                                            dialogStyle:
+                                                DialogStyle(titleDivider: true),
+                                            title: Text('تسجيل الخروج',
+                                                style: GoogleFonts.tajawal(
+                                                    fontSize: 14.sp,
+                                                    color: Color(0xff707070),
+                                                    fontWeight:
+                                                        FontWeight.w600)),
+                                            content: Text("هل تريد الخروج؟",
+                                                style: GoogleFonts.tajawal(
+                                                    fontSize: 11.sp,
+                                                    color: Color(0xff707070),
+                                                    fontWeight:
+                                                        FontWeight.w600)),
+                                            actions: <Widget>[
+                                              TextButton(
+                                                  child: Text('نعم',
+                                                      style: GoogleFonts.tajawal(
+                                                          fontSize: 11.sp,
+                                                          color:
+                                                              Colors.red,
+                                                          fontWeight:
+                                                              FontWeight.w600)),
+                                                  onPressed: () async {
+                                                    SharedPreferences prefs =
+                                                        await SharedPreferences
+                                                            .getInstance();
 
-                              Navigator.of(context, rootNavigator: true)
-                                  .pushAndRemoveUntil(
-                                MaterialPageRoute(
-                                  builder: (BuildContext context) {
-                                    return LoginScreen();
-                                  },
-                                ),
-                                (_) => false,
-                              );
-                            }),
-                        TextButton(
-                            child: Text('إلغاء',
-                                style: TextStyle(
-                                    fontSize: 11.sp,
-                                    color: Color(0xff707070),
-                                    fontWeight: FontWeight.w600)),
-                            onPressed: () {
-                              Navigator.pop(context);
-                            }),
-                      ],
-                    ).show(context);
-                 }),
+                                                    prefs.remove('userToken');
+                                                    Provider.of<AuthProvider>(
+                                                            context,
+                                                            listen: false)
+                                                        .user = null;
+
+                                                    Navigator.of(context,
+                                                            rootNavigator: true)
+                                                        .pushAndRemoveUntil(
+                                                      MaterialPageRoute(
+                                                        builder: (BuildContext
+                                                            context) {
+                                                          return LoginScreen();
+                                                        },
+                                                      ),
+                                                      (_) => false,
+                                                    );
+                                                  }),
+                                              TextButton(
+                                                  child: Text('إلغاء',
+                                                      style: TextStyle(
+                                                          fontSize: 11.sp,
+                                                          color:
+                                                              Color(0xff707070),
+                                                          fontWeight:
+                                                              FontWeight.w600)),
+                                                  onPressed: () {
+                                                    Navigator.pop(context);
+                                                  }),
+                                            ],
+                                          ).show(context);
+                                        }),
                                   );
                                   return FocusedMenuHolder(
+                                    key: notiicationKey,
                                     openWithTap:
                                         true, // Open Focused-Menu on Tap rather than Long Press
 
@@ -257,6 +370,7 @@ class _RecorderScreenState extends State<RecorderScreen> {
                           Align(
                             alignment: Alignment.centerLeft,
                             child: InkWell(
+                              key:lllistKey ,
                               onTap: () {
                                 Navigator.pushReplacement(
                                     context,
@@ -278,7 +392,38 @@ class _RecorderScreenState extends State<RecorderScreen> {
                         ],
                       ),
                       SizedBox(
-                        height: 20.h,
+                        height: 5.h,
+                      ),
+                      SizedBox(
+                        height: 10.h,
+                        child: !recorder.isRecording
+                                    ? DefaultTextStyle(
+                          style:  TextStyle(
+                            fontSize: 30.sp,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            shadows: [
+                              Shadow(
+                                blurRadius: 7.0,
+                                color: Colors.white,
+                                offset: Offset(0, 0),
+                              ),
+                            ],
+                          ),
+                          child: AnimatedTextKit(
+                            repeatForever: true,
+                            animatedTexts: [
+                              FlickerAnimatedText(user!.username!),
+                            ],
+                            onTap: () {
+                              print("Tap Event");
+                            },
+                          ),
+                        ):
+                        Container(),
+                      ),
+                       SizedBox(
+                        height: 5.h,
                       ),
                       Container(
                         height: 22.h,
@@ -322,8 +467,9 @@ class _RecorderScreenState extends State<RecorderScreen> {
                                         size: 100.sp,
                                       )
                                     : Image.asset(
+                                      
                                         'assets/images/microphone3.png',
-                                        height: 100.sp,
+                                        height: 100.sp,key: recordKey,
                                       )
 
                             // Icon(
@@ -580,7 +726,7 @@ class _RecorderScreenState extends State<RecorderScreen> {
         toFile: 'tau_file.mp4',
         sampleRate: 441000,
         codec: Codec.aacMP4,
-        bitRate: 128000);
+        bitRate: 100000);
     setState(() {});
   }
 
@@ -643,7 +789,7 @@ class _RecorderScreenState extends State<RecorderScreen> {
                   style: GoogleFonts.tajawal(color: Color(0xff00A4EA)),
                 ),
                 onPressed: () {
-                  Navigator.push(
+                  Navigator.pushReplacement(
                       context,
                       PageTransition(
                           type: PageTransitionType.fade,
@@ -654,4 +800,135 @@ class _RecorderScreenState extends State<RecorderScreen> {
       ],
     ).show(context);
   }
+
+GlobalKey notiicationKey = GlobalKey();
+  GlobalKey recordKey = GlobalKey();
+  GlobalKey lllistKey = GlobalKey();
+  
+
+
+   List<TargetFocus> _createTargets() {
+    List<TargetFocus> targets = [];
+    targets.add(
+      TargetFocus(
+        enableOverlayTab: true,
+        identify: "target 1",
+        keyTarget: recordKey,
+        alignSkip: Alignment.bottomCenter,
+        contents: [
+          TargetContent(
+            customPosition: CustomTargetContentPosition(bottom: 5, right: 10),
+            builder: (context, controller) {
+              return Padding(
+                padding: EdgeInsets.only(top: 5.h),
+                child: Container(
+                  child: Text(
+                    "إضغط هنا لبدء تسجيل الصوت",
+                    style: GoogleFonts.tajawal(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w500,
+                        fontSize: 16.sp),
+                  ),
+                ),
+              );
+            },
+          ),
+        ],
+      ),
+    );
+
+    targets.add(
+      TargetFocus(
+        radius: 90,
+        enableOverlayTab: true,
+        identify: "target 2",
+        keyTarget: notiicationKey,
+        alignSkip: Alignment.bottomCenter,
+        contents: [
+          TargetContent(
+            align: ContentAlign.bottom,
+            builder: (context, controller) {
+              return Container(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                     "إضغط هنا لرؤية إعجابات تسجيلاتك",
+                      style: GoogleFonts.tajawal(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 16.sp),
+                    )
+                  ],
+                ),
+              );
+            },
+          ),
+        ],
+      ),
+    );
+
+    targets.add(
+      TargetFocus(
+        enableOverlayTab: true,
+        identify: "target 3",
+        keyTarget: lllistKey,
+        alignSkip: Alignment.bottomCenter,
+        contents: [
+          TargetContent(
+              padding: EdgeInsets.all(20),
+              align: ContentAlign.bottom,
+              child: Container(
+                padding: EdgeInsets.only(top: 10.h),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      "إضغط هنا للرجوع لقائمة التسجيلات",
+                      style: GoogleFonts.tajawal(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 16.sp),
+                    ),
+              
+                  ],
+                ),
+              )),
+        ],
+      ),
+    );
+ targets.add(
+      TargetFocus(
+        enableOverlayTab: true,
+        identify: "target 1",
+        keyTarget: recordKey,
+        alignSkip: Alignment.bottomCenter,
+        contents: [
+          TargetContent(
+            customPosition: CustomTargetContentPosition(bottom: 5, right: 10),
+            builder: (context, controller) {
+              return Padding(
+                padding: EdgeInsets.only(top: 5.h),
+                child: Container(
+                  child: Text(
+                    "هذا كل م تحتاجه لإستخدام تطبيق Tell Me , يمكنك الآن تسجيل أول مقطع لك (:",
+                    style: GoogleFonts.tajawal(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w500,
+                        fontSize: 16.sp),
+                  ),
+                ),
+              );
+            },
+          ),
+        ],
+      ),
+    );
+
+   
+    return targets;
+  }
+
 }

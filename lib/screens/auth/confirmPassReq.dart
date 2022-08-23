@@ -112,7 +112,6 @@ class _ConfirmPassWordState extends State<ConfirmPassWord> {
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(Icons.swipe_right_alt),
                       
                       Text(
                         'تسجيل',
@@ -186,7 +185,7 @@ class _ConfirmPassWordState extends State<ConfirmPassWord> {
                             showTopSnackBar(
                               context,
                               CustomSnackBar.error(
-                                message: " خطأ في التسجيل, حاول مجددا",
+                                message: "إسم المستخدم موجود مسبقا , غير الإسم وحاول مجددا",
                               ),
                             );
                           }
@@ -209,7 +208,7 @@ class _ConfirmPassWordState extends State<ConfirmPassWord> {
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(Icons.swipe_left_alt),
+                      Icon(Icons.arrow_right_outlined),
                       Text(
                         'رجوع',
                         style: TextStyle(

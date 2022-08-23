@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animated_button/flutter_animated_button.dart';
+import 'package:ionicons/ionicons.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
@@ -65,8 +66,8 @@ class _UserNameRegState extends State<UserNameReg> {
                   if (value!.isEmpty) {
                     return 'لا تترك هذا الحقل فارغا';
                   }
-                  if (value.length < 4) {
-                    return "يجب ان لا يقل اسم المستخدم عن أربعة حروف";
+                  if (value.length < 3) {
+                    return "يجب ان لا يقل اسم المستخدم عن ثلاثة حروف";
                   }
                 },
                 decoration: InputDecoration(
@@ -96,7 +97,7 @@ class _UserNameRegState extends State<UserNameReg> {
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(Icons.swipe_right_alt),
+                      Icon(Icons.arrow_left_outlined),
                       Text(
                         'التالي',
                         style: TextStyle(
@@ -129,7 +130,7 @@ class _UserNameRegState extends State<UserNameReg> {
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(Icons.swipe_left_alt),
+                      Icon(Icons.arrow_right_outlined),
                       Text(
                         'رجوع',
                         style: TextStyle(

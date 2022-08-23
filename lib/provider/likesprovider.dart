@@ -21,7 +21,7 @@ class LikesProvider with ChangeNotifier {
 
   // ignore: unnecessary_new
   BaseOptions options = new BaseOptions(
-    baseUrl: "http://192.168.43.250:7000",
+    baseUrl: "https://aboutmetell.com",
     connectTimeout: 150000,
     receiveTimeout: 150000,
     contentType: 'application/json',

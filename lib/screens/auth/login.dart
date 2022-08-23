@@ -30,6 +30,14 @@ class _LoginScreenState extends State<LoginScreen> {
 
       bool? _isConnected;
 
+      GlobalKey cardKey = GlobalKey();
+  GlobalKey buttonKey = GlobalKey();
+  // GlobalKey keyButton2 = GlobalKey();
+  // GlobalKey keyButton3 = GlobalKey();
+  // GlobalKey keyButton4 = GlobalKey();
+  // GlobalKey keyButton5 = GlobalKey();
+
+
 
   Future<String> _checkInternetConnection() async {
     try {
@@ -77,8 +85,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       if (value!.isEmpty) {
                         return 'لا تترك هذا الحقل فارغا';
                       }
-                      if (value.length < 5) {
-                        return "يجب ان لا يقل اسم المستخدم عن خمسة حروف";
+                      if (value.length < 3) {
+                        return "يجب ان لا يقل اسم المستخدم عن تلاتة حروف";
                       }
                     },
                     

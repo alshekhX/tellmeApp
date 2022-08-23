@@ -8,12 +8,13 @@ import 'package:tell_me/models/QuestionModel.dart';
 
 class QuestionProvider with ChangeNotifier {
   List? questions;
+  int? curentIndex;
 
   Question? question;
 
   // ignore: unnecessary_new
   BaseOptions options = new BaseOptions(
-    baseUrl: "http://192.168.43.250:7000",
+    baseUrl: "https://aboutmetell.com",
     connectTimeout: 150000,
     receiveTimeout: 150000,
     contentType: 'application/json',

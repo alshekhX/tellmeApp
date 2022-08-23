@@ -5,7 +5,7 @@ import 'package:dio/dio.dart';
 
 import 'package:flutter/material.dart';
 import 'package:tell_me/models/QuestionModel.dart';
- import 'package:http_parser/http_parser.dart';
+import 'package:http_parser/http_parser.dart';
 
 import 'package:tell_me/models/RecordModel.dart';
 
@@ -22,7 +22,9 @@ class RecordProvider with ChangeNotifier {
 
   // ignore: unnecessary_new
   BaseOptions options = new BaseOptions(
-    baseUrl: "http://192.168.43.250:7000",
+    // baseUrl: "http://192.168.43.250:7000",
+    baseUrl: "https://aboutmetell.com",
+
     connectTimeout: 150000,
     receiveTimeout: 150000,
     contentType: 'application/json',
@@ -31,41 +33,40 @@ class RecordProvider with ChangeNotifier {
     },
   );
 
-  getRecords() async {
+  getRecords(int i) async {
     // try {
-      // String gte = 'gte';
-      // String lte = 'lte';
+    // String gte = 'gte';
+    // String lte = 'lte';
 
-      // //Dio option config
+    // //Dio option config
 
-      // var calendarTime = CalendarTime(DateTime.now());
+    // var calendarTime = CalendarTime(DateTime.now());
 
-      // var dayBefore = calendarTime.startOfToday.subtract(Duration(days: 1));
-      // var dayEnd = calendarTime.endOfToday;
+    // var dayBefore = calendarTime.startOfToday.subtract(Duration(days: 1));
+    // var dayEnd = calendarTime.endOfToday;
 
-      // print(calendarTime.startOfToday);
+    // print(calendarTime.startOfToday);
 
-      Dio dio = Dio(options);
+    Dio dio = Dio(options);
 
-      // Response response = await dio.get("/api/v1/articles", queryParameters: {
-      //   'createdAt': {"$gte": "$dayBefore", "\$$lte": "$dayEnd"}
-      // });
+    // Response response = await dio.get("/api/v1/articles", queryParameters: {
+    //   'createdAt': {"$gte": "$dayBefore", "\$$lte": "$dayEnd"}
+    // });
 
-      Response response = await dio.get(
-        "/api/v1/record/${question!.id}",
-      );
-      print(response.data);
-      if (response.statusCode == 200) {
-        final map = response.data['data'];
+    Response response = await dio.get("/api/v1/record",
+        queryParameters: {"page": i, "question": question!.id});
+    print(response.data);
+    if (response.statusCode == 200) {
+      final map = response.data['data'];
 
-        records = map.map((i) => Record.fromMap(i)).toList();
-        notifyListeners();
-        // DateTime
-        return 'success';
-      } else {
-        String error = response.data['errorMessage'].toString();
-        return error;
-      }
+      records = map.map((i) => Record.fromMap(i)).toList();
+      notifyListeners();
+      // DateTime
+      return 'success';
+    } else {
+      String error = response.data['errorMessage'].toString();
+      return error;
+    }
     // } catch (e) {
     //   return e.toString();
     // }
@@ -76,18 +77,17 @@ class RecordProvider with ChangeNotifier {
     var dio = Dio(options);
     dio.options.headers["authorization"] = 'Bearer $token';
 
-    String url = '/api/v1/record/${question!.id}';
+    print(question!.id);
     FormData formData = FormData.fromMap({
-      "recordFile": MultipartFile.fromBytes(
-        record,contentType: MediaType('audio','mp4'),filename: 'ghvgv'
-      ),
+      "recordFile": MultipartFile.fromBytes(record,
+          contentType: MediaType('audio', 'mp4'), filename: 'ghvgv'),
       "title": title,
     });
 
-    Response response = await dio.post(url, data: formData);
+    Response response = await dio.post('/api/v1/record/${question!.id}', data: formData);
     print(response.data);
     if (response.statusCode == 201) {
-      await getRecords();
+      await getRecords(1);
       return 'success';
     } else {
       return response.data["errorMessage"].toString();

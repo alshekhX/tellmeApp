@@ -46,7 +46,10 @@ dependencies:
   concentric_transition: ^1.0.3
   just_audio: ^0.9.28
   lottie: ^1.2.2
+  tutorial_coach_mark: ^1.2.4
+  shimmer: ^2.0.0
   dio: ^4.0.0
+  pull_to_refresh: ^2.0.0
 
   ndialog: ^4.1.0
   flutter_animated_button: ^2.0.0

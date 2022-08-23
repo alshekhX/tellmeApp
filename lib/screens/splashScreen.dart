@@ -20,10 +20,13 @@ class _SplashScreenState extends State<SplashScreen> {
           height: MediaQuery.of(context).size.height,
           width: double.infinity,
           decoration: BoxDecoration(
-              gradient: LinearGradient(colors: [
-           Colorss.recorderBackground,
-            Color(0xff1D1D1D),
-          ], begin: Alignment.topRight, end: Alignment.bottomLeft)),
+          //     gradient: LinearGradient(colors: [
+          //  Colorss.recorderBackground,
+          //   Color(0xff1D1D1D),
+          // ], begin: Alignment.topRight, end: Alignment.bottomLeft)),
+color:            Color(0xff887D99),
+
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
@@ -47,7 +50,7 @@ class _SplashScreenState extends State<SplashScreen> {
               SizedBox(height: 4.h),
               Container(
                
-                child: Text('tell your story and listen to others',
+                child: Text('Tell your story and Listen to others',
                     style: TextStyle(
                             fontSize: 14.sp,
                             color: Colors.white,
