@@ -14,18 +14,18 @@ class MainLisShimmer extends StatelessWidget {
     return Shimmer.fromColors(
       enabled: true,
       child: Container(
-        height: 10.h,
+                margin: EdgeInsets.symmetric(vertical: 5.sp),
         child: Row(
           children: [
             SizedBox(
               width: 10.w,
             ),
             CircleAvatar(
-              radius: 24,
+              radius: 20.sp,
               backgroundColor: Colors.grey.shade300,
               child: CircleAvatar(
                 backgroundColor: Colors.white,
-                radius: 21,
+                radius: 19.sp,
                 child: Image.asset(
                   'assets/images/mic.png',
                   width: 10.w,
@@ -67,5 +67,6 @@ class MainLisShimmer extends StatelessWidget {
       baseColor: Colors.grey.shade300,
       highlightColor: Colors.grey.shade100,
     );
+    
   }
 }

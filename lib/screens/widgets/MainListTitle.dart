@@ -1,27 +1,18 @@
 import 'dart:io';
 
-import 'package:animated_text_kit/animated_text_kit.dart';
-import 'package:auto_size_text/auto_size_text.dart';
-import 'package:concentric_transition/page_route.dart';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_sound/public/flutter_sound_player.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:ionicons/ionicons.dart';
-import 'package:like_button/like_button.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import 'package:lottie/lottie.dart';
 import 'package:ndialog/ndialog.dart';
-import 'package:page_transition/page_transition.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import 'package:tell_me/provider/auth.dart';
 import 'package:tell_me/provider/likesprovider.dart';
-import 'package:tell_me/provider/questionProvider.dart';
-import 'package:tell_me/provider/recordsProvider.dart';
-import 'package:tell_me/screens/recorder_screen.dart';
+
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
@@ -108,7 +99,7 @@ class _AudioListTileState extends State<AudioListTile> {
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                   duration: Duration(seconds: 2),
                   backgroundColor: Color(0xff836F81),
-                  content: Text('بطل نرجسية ي فنان دا التسجيل بتاعك',
+                  content: Text('بطل نرجسية, دا التسجيل بتاعك',
                       style: GoogleFonts.tajawal(
                           fontSize: 12.sp,
                           color: Colors.white,
@@ -180,14 +171,16 @@ class _AudioListTileState extends State<AudioListTile> {
                             }
                           },
                           child: CircleAvatar(
-                            radius: 24,
+                            radius: 20.sp,
                             backgroundColor: Colors.grey.shade300,
                             child: CircleAvatar(
                               backgroundColor: Colors.white,
-                              radius: 21,
-                              child: Image.asset(
-                                'assets/images/mic.png',
-                                width: 10.w,
+                              radius: 18.sp,
+                              child: Padding(
+                                padding:  EdgeInsets.all(2.sp),
+                                child: Image.asset(
+                                  'assets/images/mic.png',
+                                ),
                               ),
                             ),
                           ),
@@ -345,10 +338,13 @@ class _AudioListTileState extends State<AudioListTile> {
                               ],
                             ).show(context);
                           },
-                          child: Image.asset(
-                            'assets/images/red_card1.png',
-                            height: 18.sp,
-                            width: 18.sp,
+                          child: Padding(
+                            padding:  EdgeInsets.only(right: 5.sp,top: 2.sp,bottom: 2.sp),
+                            child: Image.asset(
+                              'assets/images/red_card1.png',
+                              height: 18.sp,
+                              width: 18.sp,
+                            ),
                           ),
                         ),
                         // Text(

@@ -1,7 +1,10 @@
+import 'dart:math';
+
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:concentric_transition/page_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_sound/public/flutter_sound_player.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ionicons/ionicons.dart';
@@ -17,6 +20,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:sizer/sizer.dart';
+import 'package:tell_me/models/RecordModel.dart';
 import 'package:tell_me/provider/auth.dart';
 import 'package:tell_me/provider/likesprovider.dart';
 import 'package:tell_me/provider/questionProvider.dart';
@@ -88,12 +92,16 @@ class _HomePageState extends State<HomePage> {
     records = Provider.of<RecordProvider>(context, listen: false).records;
     audioPlayer.clear();
 
-    for (int i = 0; i <= records!.length; i++) {
+    for (int i = 0; i < records!.length; i++) {
       audioPlayer.add(AudioPlayer());
     }
-    setState(() {});
-    //  createTutorial();
-    //   showTutorial();
+
+    setState(() {
+      
+    });
+
+    // createTutorial();
+    // showTutorial();
     SharedPreferences prefs = await SharedPreferences.getInstance();
     if (prefs.getInt('homeT') == null) {
       createTutorial();
@@ -108,7 +116,6 @@ class _HomePageState extends State<HomePage> {
 
     }
     else if(prefs.getInt('homeT')==2){
-
 
     }
   }
@@ -251,12 +258,12 @@ class _HomePageState extends State<HomePage> {
                     childCurrent: const HomePage()));
           },
           child: Icon(
-            Icons.mic,
+            Ionicons.mic,
             color: Colorss.homefloatingIcon,
             size: 29,
           ),
           backgroundColor: Colorss.homefloatingbackground,
-          tooltip: 'Capture Picture',
+          tooltip: 'سجل مقطع صوتي',
           elevation: 5,
           splashColor: Colors.grey,
         ),
@@ -287,7 +294,6 @@ class _HomePageState extends State<HomePage> {
                     child: SingleChildScrollView(
                       child: Column(children: [
                         Container(
-                          height: 1.h,
                         ),
                         Card(
                           borderOnForeground: true,
@@ -305,7 +311,7 @@ class _HomePageState extends State<HomePage> {
                                       fontWeight: FontWeight.bold,
                                       color: Colorss.mainCardtext),
                                 )
-
+        
                                 //  DefaultTextStyle(
                                 //   style: GoogleFonts.tajawal(
                                 //       fontSize: 25.sp,
@@ -323,7 +329,7 @@ class _HomePageState extends State<HomePage> {
                                 //     },
                                 //   ),
                                 // ),
-
+        
                                 //  AutoSizeText(
                                 //   'وريني اكتر حاجة مهمة حصلت ليك الاسبوع الفات والسبب الخلاها مهمة شديد ',
                                 //   textDirection: TextDirection.rtl,
@@ -337,58 +343,52 @@ class _HomePageState extends State<HomePage> {
                         SizedBox(
                           height: 2.h,
                         ),
-                        Container(child: Consumer<RecordProvider>(
-                            builder: (context, recordP, _) {
-                          if (shimmer == true)
-                            // ignore: curly_braces_in_flow_control_structures
-                            return Column(
-                                children: List.generate(
-                                    3, ((index) => MainLisShimmer())));
-                          else {
-                            if (recordP.records != null &&
-                                audioPlayer.isNotEmpty) {
-                              List<Widget> recordWidgets = [];
-                              AudioPlayer audioPlayerrr = AudioPlayer();
-                              recordWidgets.add(
-                                AudioListTile(
-                                  type: 'type',
-                                  title: 'عنوان التسجيل',
-                                  record: "",
-                                  player: audioPlayerrr,
-                                  id: 'test',
-                                  key: listKey,
-                                ),
-                              );
-
-                              for (int i = 0; i < records!.length; i++) {
-                                String type = 'شخص';
-
-                                if (records![i].user == user.id) {
-                                  type = 'أنت';
-                                }
-                                recordWidgets.add(
-                                  AudioListTile(
-                                    type: type,
-                                    title: records![i].title,
-                                    record: records![i].record,
-                                    player: audioPlayer[i],
-                                    id: records![i].id,
-                                  ),
-                                );
-                              }
-
-                              return Column(
-                                children: recordWidgets,
-                              );
-                            } else {
-                              return Center(
-                                  child:
-                                      LoadingAnimationWidget.staggeredDotsWave(
-                                          color: Colorss.recorderBackground,
-                                          size: 20.sp));
-                            }
-                          }
-                        }))
+                        Container(
+                            child: Consumer<RecordProvider>(
+                                key: listKey,
+                                builder: (context, recordP, _) {
+                                  if (shimmer == true)
+                                    // ignore: curly_braces_in_flow_control_structures
+                                    return Column(
+                                        children: List.generate(
+                                            3, ((index) => MainLisShimmer())));
+                                  else {
+                                    if (recordP.records != null &&
+                                        audioPlayer.isNotEmpty) {
+                                      List<Widget> recordWidgets = [];
+                                 
+        
+                                      for (int i = 0;
+                                          i < records!.length;
+                                          i++) {
+                                        String type = 'شخص';
+        
+                                        if (records![i].user == user.id) {
+                                          type = 'أنت';
+                                        }
+                                        var r = Random();
+        String letter= String.fromCharCodes(List.generate(1, (index) => r.nextInt(33) + 89));
+                                        recordWidgets.add(
+                                          AudioListTile(
+                                            type: type,
+                                            title: records![i].title==null?'':records![i].title,
+                                            record: records![i].record,
+                                            player: audioPlayer[i],
+                                            id: records![i].id,
+                                            // name:records![i].title[0],
+                                          ),
+                                        );
+                                      }
+        
+                                      return Column(
+                                        children: recordWidgets,
+                                      );
+                                    } else {
+                                      return Center(
+                                          child: Container());
+                                    }
+                                  }
+                                }))
                       ]),
                     ),
                   ),
@@ -528,20 +528,20 @@ class _HomePageState extends State<HomePage> {
     targets.add(
       TargetFocus(
         enableOverlayTab: true,
-        keyTarget: listKey,
-        alignSkip: Alignment.bottomLeft,
+        targetPosition: TargetPosition(Size(70.w, 10.h) ,Offset(40.w, 45.h)),
+        alignSkip: Alignment.topRight,
         contents: [
           TargetContent(
               padding: EdgeInsets.all(20),
               align: ContentAlign.bottom,
               child: Container(
-                padding: EdgeInsets.only(top: 30.h),
+                padding: EdgeInsets.only(top: 20.h),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(
-                      "إضغط في الصورة لسماع تجربة مستخدم آخر ",
+                      "إضغط في الصورة لسماع تسجيل مستخدم آخر ",
                       style: GoogleFonts.tajawal(
                           color: Colors.white,
                           fontWeight: FontWeight.w500,
@@ -565,19 +565,18 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
     );
-
+    
     targets.add(
       TargetFocus(
         enableOverlayTab: true,
-        keyTarget: listKey,
-        alignSkip: Alignment.bottomLeft,
+        targetPosition: TargetPosition(Size(70.w, 10.h) ,Offset(20.w, 45.h)),
+        alignSkip: Alignment.topRight,
         contents: [
           TargetContent(
-            padding: EdgeInsets.all(20),
-            align: ContentAlign.bottom,
-            builder: (context, controller) {
-              return Container(
-                padding: EdgeInsets.only(top: 30.h),
+              padding: EdgeInsets.all(20),
+              align: ContentAlign.bottom,
+              child: Container(
+                padding: EdgeInsets.only(top: 20.h),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -589,11 +588,46 @@ class _HomePageState extends State<HomePage> {
                           fontWeight: FontWeight.w500,
                           fontSize: 16.sp),
                     ),
+
                   ],
                 ),
-              );
-            },
-          ),
+              )),
+        ],
+      ),
+    );
+
+    
+    targets.add(
+      TargetFocus(
+        enableOverlayTab: true,
+        targetPosition: TargetPosition(Size(75.w, 10.h) ,Offset(-10.w, 45.h)),
+        alignSkip: Alignment.topRight,
+        contents: [
+          TargetContent(
+              padding: EdgeInsets.all(20),
+              align: ContentAlign.bottom,
+              child: Container(
+                padding: EdgeInsets.only(top: 22.h),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      "إضغط في الكرت الأحمر لعمل بلاغ ",
+                      style: GoogleFonts.tajawal(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 16.sp),
+                    ),
+                    SizedBox(height: 1.h,),
+                    Image.asset(
+                            'assets/images/red_card1.png',
+                            height: 20.sp,
+                            width: 20.sp,
+                          ),
+                  ],
+                ),
+              )),
         ],
       ),
     );

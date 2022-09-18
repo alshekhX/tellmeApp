@@ -1,5 +1,3 @@
-import 'dart:convert';
-import 'dart:io';
 
 import 'package:dio/dio.dart';
 
@@ -25,8 +23,8 @@ class RecordProvider with ChangeNotifier {
     // baseUrl: "http://192.168.43.250:7000",
     baseUrl: "https://aboutmetell.com",
 
-    connectTimeout: 150000,
-    receiveTimeout: 150000,
+    connectTimeout: 20000,
+    receiveTimeout: 20000,
     contentType: 'application/json',
     validateStatus: (status) {
       return status! < 600;

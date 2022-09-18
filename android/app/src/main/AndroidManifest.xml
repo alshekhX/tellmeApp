@@ -1,13 +1,15 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.tell_me">
+    package="com.alshekh.tell_me">
     <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+    <uses-permission android:name="com.google.android.gms.permission.AD_ID"/>
+
         <uses-permission android:name="android.permission.INTERNET"/>
 
    <application
-        android:label="tell_me"
+        android:label="Tell Me"
         android:name="${applicationName}"
         android:usesCleartextTraffic="true"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/tell_me">
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -34,5 +36,9 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+
+              <meta-data
+           android:name="com.google.android.gms.ads.APPLICATION_ID"
+           android:value="ca-app-pub-4676129671444090~1024442792"/>
     </application>
 </manifest>

@@ -20,9 +20,11 @@ import 'package:sizer/sizer.dart';
 import 'package:lottie/lottie.dart';
 import 'package:tell_me/models/RecordModel.dart';
 import 'package:tell_me/provider/recordsProvider.dart';
+import 'package:tell_me/provider/settingProvider.dart';
 import 'package:tell_me/screens/auth/login.dart';
 import 'package:tell_me/screens/classes/colors.dart';
 import 'package:tell_me/screens/home_Page.dart';
+import 'package:tell_me/screens/settingScreen.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
 import '../provider/auth.dart';
@@ -45,28 +47,23 @@ class _RecorderScreenState extends State<RecorderScreen> {
   void initState() {
     iniRecorder();
     updateUserNotification();
-    
 
-    recorderTut();
 
     // TODO: implement initState
     super.initState();
   }
 
-  void recorderTut() async{
-       SharedPreferences prefs = await SharedPreferences.getInstance();
+  void recorderTut() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     if (prefs.getInt('recorderT') == null) {
       createTutorial();
-    Future.delayed(Duration(seconds: 2), showTutorial);
+      Future.delayed(Duration(seconds: 1), showTutorial);
       prefs.setInt('recorderT', 1);
-    }
-    else if(prefs.getInt('recorderT')==1){
-createTutorial();
-    Future.delayed(Duration(seconds: 2), showTutorial);
+    } else if (prefs.getInt('recorderT') == 1) {
+      createTutorial();
+      Future.delayed(Duration(seconds: 1), showTutorial);
       prefs.setInt('recorderT', 2);
-
-    }
-    else if(prefs.getInt('recorderT')==2){
+    } else if (prefs.getInt('recorderT') == 2) {
 
 
     }
@@ -80,18 +77,12 @@ createTutorial();
     await Provider.of<AuthProvider>(context, listen: false).getUserData();
   }
 
-
-
-
-
-  
-
   void showTutorial() {
     tutorialCoachMark!.show(context: context);
   }
 
   TutorialCoachMark? tutorialCoachMark;
-    void createTutorial() {
+  void createTutorial() {
     tutorialCoachMark = TutorialCoachMark(
       targets: _createTargets(),
       colorShadow: Colors.grey.shade900,
@@ -120,7 +111,6 @@ createTutorial();
     );
   }
 
-
   @override
   void dispose() {
     recorder.closeRecorder();
@@ -129,13 +119,11 @@ createTutorial();
     super.dispose();
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<AuthProvider>(context, listen: false).user;
     return WillPopScope(
-      onWillPop: () async{
+      onWillPop: () async {
         return await NAlertDialog(
           dialogStyle: DialogStyle(titleDivider: false),
           title: Text(
@@ -183,10 +171,10 @@ createTutorial();
                                 builder: (context, userLikesProvider, _) {
                                   List<Record> likes =
                                       userLikesProvider.user!.records!;
-                                  List<FocusedMenuItem> likesWidget = likes.where((element) => element.likes!=0).toList().
-                                  
-                                  
-                                      map(
+                                  List<FocusedMenuItem> likesWidget = likes.reversed.toList()
+                                      .where((element) => element.likes != 0)
+                                      .toList()
+                                      .map(
                                         (e) => FocusedMenuItem(
                                             title: RichText(
                                               text: TextSpan(
@@ -228,7 +216,8 @@ createTutorial();
                                             // ),
                                             trailingIcon: Icon(
                                                 Ionicons.heart_circle,
-                                                color: Color.fromRGBO(131, 111, 129, 1)),
+                                                color: Color.fromRGBO(
+                                                    131, 111, 129, 1)),
                                             onPressed: () {
                                               Navigator.push(
                                                   context,
@@ -243,11 +232,15 @@ createTutorial();
                                     likesCount = likesCount + likes[i].likes!;
                                   }
 
-                                  likesWidget.add(
+                              
+
+
+
+    likesWidget.add(
                                     FocusedMenuItem(
                                         title: RichText(
                                           text: TextSpan(
-                                            text: 'تسجيل الخروج',
+                                            text: 'الإعدادات',
                                             style: GoogleFonts.tajawal(
                                               color: Colors.grey.shade700,
                                               fontSize: 11.sp,
@@ -264,68 +257,16 @@ createTutorial();
                                             Ionicons.log_out_outline,
                                             color: Colors.grey.shade700),
                                         onPressed: () async {
-                                          await NDialog(
-                                            dialogStyle:
-                                                DialogStyle(titleDivider: true),
-                                            title: Text('تسجيل الخروج',
-                                                style: GoogleFonts.tajawal(
-                                                    fontSize: 14.sp,
-                                                    color: Color(0xff707070),
-                                                    fontWeight:
-                                                        FontWeight.w600)),
-                                            content: Text("هل تريد الخروج؟",
-                                                style: GoogleFonts.tajawal(
-                                                    fontSize: 11.sp,
-                                                    color: Color(0xff707070),
-                                                    fontWeight:
-                                                        FontWeight.w600)),
-                                            actions: <Widget>[
-                                              TextButton(
-                                                  child: Text('نعم',
-                                                      style: GoogleFonts.tajawal(
-                                                          fontSize: 11.sp,
-                                                          color:
-                                                              Colors.red,
-                                                          fontWeight:
-                                                              FontWeight.w600)),
-                                                  onPressed: () async {
-                                                    SharedPreferences prefs =
-                                                        await SharedPreferences
-                                                            .getInstance();
 
-                                                    prefs.remove('userToken');
-                                                    Provider.of<AuthProvider>(
-                                                            context,
-                                                            listen: false)
-                                                        .user = null;
-
-                                                    Navigator.of(context,
-                                                            rootNavigator: true)
-                                                        .pushAndRemoveUntil(
-                                                      MaterialPageRoute(
-                                                        builder: (BuildContext
-                                                            context) {
-                                                          return LoginScreen();
-                                                        },
-                                                      ),
-                                                      (_) => false,
-                                                    );
-                                                  }),
-                                              TextButton(
-                                                  child: Text('إلغاء',
-                                                      style: TextStyle(
-                                                          fontSize: 11.sp,
-                                                          color:
-                                                              Color(0xff707070),
-                                                          fontWeight:
-                                                              FontWeight.w600)),
-                                                  onPressed: () {
-                                                    Navigator.pop(context);
-                                                  }),
-                                            ],
-                                          ).show(context);
-                                        }),
+                                          Navigator.push(context, MaterialPageRoute(builder: (context)=>Settings()));
+                                           }),
                                   );
+                              
+
+
+
+
+
                                   return FocusedMenuHolder(
                                     key: notiicationKey,
                                     openWithTap:
@@ -345,7 +286,7 @@ createTutorial();
                                           Icon(
                                             Icons.notifications,
                                             size: 20.sp,
-                                            color: Colorss.recordertimerColor,
+                                            color: Colors.white,
                                           ),
                                           Positioned(
                                               top: 0,
@@ -370,7 +311,7 @@ createTutorial();
                           Align(
                             alignment: Alignment.centerLeft,
                             child: InkWell(
-                              key:lllistKey ,
+                              key: lllistKey,
                               onTap: () {
                                 Navigator.pushReplacement(
                                     context,
@@ -397,38 +338,39 @@ createTutorial();
                       SizedBox(
                         height: 10.h,
                         child: !recorder.isRecording
-                                    ? DefaultTextStyle(
-                          style:  TextStyle(
-                            fontSize: 30.sp,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            shadows: [
-                              Shadow(
-                                blurRadius: 7.0,
-                                color: Colors.white,
-                                offset: Offset(0, 0),
-                              ),
-                            ],
-                          ),
-                          child: AnimatedTextKit(
-                            repeatForever: true,
-                            animatedTexts: [
-                              FlickerAnimatedText(user!.username!),
-                            ],
-                            onTap: () {
-                              print("Tap Event");
-                            },
-                          ),
-                        ):
-                        Container(),
+                            ? DefaultTextStyle(
+                                style: GoogleFonts.lalezar(
+                                  fontSize: 30.sp,
+                                  color: Colors.white,
+                                  shadows: [
+                                    Shadow(
+                                      blurRadius: 7.0,
+                                      color: Colors.white,
+                                      offset: Offset(0, 0),
+                                    ),
+                                  ],
+                                ),
+                                child: AnimatedTextKit(
+                                  repeatForever: true,
+                                  animatedTexts: [
+                                    FlickerAnimatedText(user!.username!,textStyle: TextStyle()),
+                                    
+                                  ],
+                                  onTap: () {
+                                    print("Tap Event");
+                                  },
+                                ),
+                              )
+                            : Container(),
                       ),
-                       SizedBox(
-                        height: 5.h,
+                      SizedBox(
+                        height: 2.h,
                       ),
                       Container(
-                        height: 22.h,
-                        width: 22.h,
+                        height: 120.sp,
+                        width: 120.sp,
                         child: FloatingActionButton(
+                          
                             backgroundColor: Colorss.recorderfloatingbackground,
                             elevation: 0,
                             onPressed: () async {
@@ -452,25 +394,39 @@ createTutorial();
                                 ? Consumer<RecordProvider>(
                                     builder: ((context, value, _) {
                                       return Container(
-                                        child: Lottie.asset(
-                                            'assets/lotti/speakerRecorder.json',
-                                            height: 200.sp,
-                                            width: 200.sp,
-                                            animate: value.lottiAnime),
+                                        child: Icon(Ionicons.repeat,size: 100.sp,color: Colorss.recorderBackground,)
+                                        
+                                        // Lottie.asset(
+                                        //     'assets/lotti/speakerRecorder.json',
+                                        //     height: 200.sp,
+                                        //     width: 200.sp,
+                                        //     animate: value.lottiAnime),
+
+
+
                                       );
                                     }),
                                   )
                                 : recorder.isRecording
                                     ? Icon(
-                                        Icons.stop,
+                                        Ionicons.stop,
+                                        color: Colorss.recorderfloatingIcon,
+                                        size: 90.sp,
+                                      )
+                                    : 
+                                    Icon(
+                                        Ionicons.mic,
                                         color: Colorss.recorderfloatingIcon,
                                         size: 100.sp,
+                                        key: recordKey,
+
                                       )
-                                    : Image.asset(
-                                      
-                                        'assets/images/microphone3.png',
-                                        height: 100.sp,key: recordKey,
-                                      )
+                                    
+                                    // Image.asset(
+                                    //     'assets/images/microphone3.png',
+                                    //     height: 100.sp,
+                                    //     key: recordKey,
+                                    //   )
 
                             // Icon(
                             //     Icons.mic,
@@ -481,7 +437,7 @@ createTutorial();
                             ),
                       ),
                       SizedBox(
-                        height: 2.h,
+                        height: 3.h,
                       ),
 
                       player.isPlaying == true || player.isPaused == true
@@ -499,11 +455,12 @@ createTutorial();
                                   width: 70.w,
                                   child: ProgressBar(
                                     thumbColor:
-                                        Color.fromARGB(186, 242, 151, 47),
+                                        Color(0xffF2962F),
                                     progressBarColor: Color(0xffF2962F),
                                     baseBarColor:
                                         Color(0xffF2962F).withOpacity(.7),
                                     progress: progress,
+                                    barHeight: 1.sp,
                                     total: total,
                                     timeLabelTextStyle:
                                         TextStyle(color: Colorss.recordertext),
@@ -545,7 +502,7 @@ createTutorial();
                                   '$twoDigitMinits:$twoDigitSecound',
                                   style: TextStyle(
                                       color: Colorss.recordertimerColor,
-                                      fontSize: 25.sp),
+                                      fontSize: 30.sp),
                                 );
                               },
                               stream: recorder.onProgress,
@@ -565,16 +522,17 @@ createTutorial();
                                 ],
                               ),
                               width: 50.w,
+                              height: 25.h,
                               fit: BoxFit.fill,
                             )
                           : Container(),
                       Spacer(),
                       recorder.isRecording == false && record != null
                           ? Container(
-                              width: 30.w,
+                              width: 140.sp,
                               child: ElevatedButton(
                                   style: ElevatedButton.styleFrom(
-                                    elevation: 2,
+                                    elevation: 10,
                                     primary: Colorss.recordertimerColor,
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(25),
@@ -623,7 +581,8 @@ createTutorial();
                                               "إرسال التسجيل",
                                               style: GoogleFonts.tajawal(
                                                   color: Color.fromARGB(
-                                                      247, 78, 162, 120)),
+                                                      247, 78, 162, 120),fontSize: 12.sp
+                                                      ),
                                             ),
                                             onPressed: () async {
                                               CustomProgressDialog
@@ -690,7 +649,7 @@ createTutorial();
                                             child: Text(
                                               "إعادة التسجيل",
                                               style: GoogleFonts.tajawal(
-                                                  color: Color(0xff00A4EA)),
+                                                  color: Color(0xff00A4EA),fontSize: 12.sp),
                                             ),
                                             onPressed: () async {
                                               Navigator.pop(context);
@@ -703,7 +662,7 @@ createTutorial();
                                     'حفظ',
                                     style: TextStyle(
                                         color: Colorss.buttontext,
-                                        fontSize: 15.sp),
+                                        fontSize: 16.sp),
                                   )),
                             )
                           : Container(),
@@ -712,9 +671,8 @@ createTutorial();
                       )
                     ],
                   )
-                : CircularProgressIndicator(
-                    color: Colorss.recordertext,
-                  ),
+                :LoadingAnimationWidget.beat(
+                        color: Colorss.recorderText, size: 40.sp)
           ),
         ),
       ),
@@ -755,6 +713,7 @@ createTutorial();
 
       isRecorderReady = true;
       setState(() {});
+      recorderTut();
       recorder.setSubscriptionDuration(Duration(milliseconds: 500));
       player.setSubscriptionDuration(Duration(milliseconds: 100));
     }
@@ -801,13 +760,11 @@ createTutorial();
     ).show(context);
   }
 
-GlobalKey notiicationKey = GlobalKey();
+  GlobalKey notiicationKey = GlobalKey();
   GlobalKey recordKey = GlobalKey();
   GlobalKey lllistKey = GlobalKey();
-  
 
-
-   List<TargetFocus> _createTargets() {
+  List<TargetFocus> _createTargets() {
     List<TargetFocus> targets = [];
     targets.add(
       TargetFocus(
@@ -854,7 +811,7 @@ GlobalKey notiicationKey = GlobalKey();
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(
-                     "إضغط هنا لرؤية إعجابات تسجيلاتك",
+                      "إضغط هنا لرؤية إعجابات تسجيلاتك",
                       style: GoogleFonts.tajawal(
                           color: Colors.white,
                           fontWeight: FontWeight.w500,
@@ -892,14 +849,13 @@ GlobalKey notiicationKey = GlobalKey();
                           fontWeight: FontWeight.w500,
                           fontSize: 16.sp),
                     ),
-              
                   ],
                 ),
               )),
         ],
       ),
     );
- targets.add(
+    targets.add(
       TargetFocus(
         enableOverlayTab: true,
         identify: "target 1",
@@ -913,7 +869,7 @@ GlobalKey notiicationKey = GlobalKey();
                 padding: EdgeInsets.only(top: 5.h),
                 child: Container(
                   child: Text(
-                    "هذا كل م تحتاجه لإستخدام تطبيق Tell Me , يمكنك الآن تسجيل أول مقطع لك (:",
+                    "هذا كل م تحتاجه , يمكنك الآن تسجيل أول مقطع لك (:",
                     style: GoogleFonts.tajawal(
                         color: Colors.white,
                         fontWeight: FontWeight.w500,
@@ -927,8 +883,6 @@ GlobalKey notiicationKey = GlobalKey();
       ),
     );
 
-   
     return targets;
   }
-
 }

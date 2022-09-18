@@ -1,7 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 import 'package:tell_me/provider/auth.dart';
@@ -9,13 +11,39 @@ import 'package:tell_me/provider/likesprovider.dart';
 import 'package:tell_me/provider/questionProvider.dart';
 import 'package:tell_me/provider/recordsProvider.dart';
 import 'package:tell_me/screens/auth/login.dart';
-import 'package:tell_me/screens/auth/userNameReg.dart';
 import 'package:tell_me/screens/home_Page.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
+import 'package:tell_me/screens/introScreen.dart';
 import 'package:tell_me/screens/splashScreen.dart';
+import 'package:tell_me/util/ad_helper.dart';
 
-void main() {
+AppOpenAd? myAppOpenAd;
+
+loadAppOpenAd() {
+  AppOpenAd.load(
+      adUnitId: AdHelper.bannerAdUnitId, //Your ad Id from admob
+      request: const AdRequest(),
+      adLoadCallback: AppOpenAdLoadCallback(
+          onAdLoaded: (ad) {
+            myAppOpenAd = ad;
+            myAppOpenAd!.show();
+          },
+          onAdFailedToLoad: (error) {}),
+      orientation: AppOpenAd.orientationPortrait);
+}
+
+void main() async {
+
+  await WidgetsFlutterBinding.ensureInitialized();
+
+  MobileAds.instance
+    ..initialize()
+    ..updateRequestConfiguration(
+      RequestConfiguration(testDeviceIds: ['431972133162394FE5C8A8B5D8F019F6']),
+    );
+  loadAppOpenAd();
+
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(create: (context) => QuestionProvider()),
     ChangeNotifierProvider(create: (context) => RecordProvider()),
@@ -73,7 +101,17 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   bool alredyLogged = false;
+  bool firstTime = false;
   SharedPreferences? prefs;
+  
+
+
+  @override
+  void initState() {
+
+    // TODO: implement initState
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
@@ -87,7 +125,10 @@ class _MyHomePageState extends State<MyHomePage> {
         future: verifyuserToken(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
-            if (alredyLogged == true) {
+            print(firstTime);
+            if (firstTime == true) {
+              return IntroScreen();
+            } else if (alredyLogged == true) {
               return HomePage();
             } else
               return LoginScreen();
@@ -97,16 +138,22 @@ class _MyHomePageState extends State<MyHomePage> {
         },
       ),
     );
-    ;
+
     // This trailing comma makes auto-formatting nicer for build methods.
   }
 
-  verifyuserToken() async {
+  Future<void> verifyuserToken() async {
     try {
-      Timer(const Duration(seconds: 2), () async{
-        
-      });
-      prefs = await SharedPreferences.getInstance();
+      await Future.delayed(Duration(seconds: 3));
+
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      print(prefs.getString('first'));
+      if (prefs.getString('first')==null) {
+        firstTime = true;
+
+        prefs.setString('first', 'in');
+      }
+
 
       // if (prefs!.getString('username') != null) {
       //   print((prefs!.getString('username')));
@@ -122,28 +169,28 @@ class _MyHomePageState extends State<MyHomePage> {
       //   print(Provider.of<AuthProvider>(context, listen: false).user!.name);
       // }
 
-      if (prefs!.getString('userToken') != null) {
+      if (prefs.getString('userToken') != null) {
         Provider.of<AuthProvider>(context, listen: false).token =
-            prefs!.getString('userToken')!;
+            prefs.getString('userToken')!;
         String res = await Provider.of<AuthProvider>(context, listen: false)
             .getUserData();
 
         if (res == 'success') {
           alredyLogged = true;
         } else {
-             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  duration: Duration(seconds: 2),
-                  backgroundColor: Colors.redAccent,
-                  content: Text("تأكد من تشغيل البيانات",
-                      style: GoogleFonts.tajawal(
-                          fontSize: 12.sp,
-                          color: Colors.white,
-                          fontWeight: FontWeight.w400)),
-                ));
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            duration: Duration(seconds: 2),
+            backgroundColor: Colors.redAccent,
+            content: Text("تأكد من تشغيل البيانات",
+                style: GoogleFonts.tajawal(
+                    fontSize: 12.sp,
+                    color: Colors.white,
+                    fontWeight: FontWeight.w400)),
+          ));
           alredyLogged = false;
-          
         }
       } else {
+        
         alredyLogged = false;
       }
     } catch (e) {

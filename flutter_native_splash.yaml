@@ -1,0 +1,9 @@
+   
+  flutter_native_splash:
+    color: "#F1F5FB"
+    image: assets/images/tellsplash.png
+
+
+    android_12:
+      image: assets/images/tellsplash.png
+      icon_background_color: "#FFFFFF"

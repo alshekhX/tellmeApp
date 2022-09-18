@@ -185,7 +185,7 @@ class _ConfirmPassWordState extends State<ConfirmPassWord> {
                             showTopSnackBar(
                               context,
                               CustomSnackBar.error(
-                                message: "إسم المستخدم موجود مسبقا , غير الإسم وحاول مجددا",
+                                    message: "الخادم مشغول , الرجاء المحاولة مجددا",
                               ),
                             );
                           }

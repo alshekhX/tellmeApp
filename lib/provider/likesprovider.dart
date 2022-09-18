@@ -1,13 +1,9 @@
-import 'dart:convert';
-import 'dart:io';
 
 import 'package:dio/dio.dart';
 
 import 'package:flutter/material.dart';
 import 'package:tell_me/models/QuestionModel.dart';
- import 'package:http_parser/http_parser.dart';
 
-import 'package:tell_me/models/RecordModel.dart';
 
 class LikesProvider with ChangeNotifier {
   List? likes;
@@ -22,8 +18,8 @@ class LikesProvider with ChangeNotifier {
   // ignore: unnecessary_new
   BaseOptions options = new BaseOptions(
     baseUrl: "https://aboutmetell.com",
-    connectTimeout: 150000,
-    receiveTimeout: 150000,
+    connectTimeout: 20000,
+    receiveTimeout: 20000,
     contentType: 'application/json',
     validateStatus: (status) {
       return status! < 600;
