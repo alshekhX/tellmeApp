@@ -5,16 +5,17 @@ import 'package:webview_flutter/webview_flutter.dart';
 
 import 'classes/colors.dart';
 
-class Rules extends StatefulWidget {
-  const Rules({Key? key}) : super(key: key);
+class Terms extends StatefulWidget {
+  const Terms({ Key? key }) : super(key: key);
 
   @override
-  State<Rules> createState() => _RulesState();
+  State<Terms> createState() => _TermsState();
 }
 
-class _RulesState extends State<Rules> {
-  bool isLoading = true;
-  @override
+class _TermsState extends State<Terms> {
+    bool isLoading = true;
+
+   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -22,22 +23,22 @@ class _RulesState extends State<Rules> {
         centerTitle: true,
         iconTheme: IconThemeData(color: Colorss.recorderBackground),
         title: Text(
-          'سياسة الخصوصية',
+          'الشروط والأحكام',
           style: TextStyle(color: Color(0xff212427)),
         ),
       ),
       body: Container(
-        child: Stack(
+        
+        child:   Stack(
           children: [
             WebView(
-              initialUrl: 'https://pages.flycricket.io/tell-me-1/privacy.html',
-              onPageFinished: (finish) {
-                setState(() {
-                  isLoading = false;
-                });
-              },
-            ),
-              isLoading
+             initialUrl: 'https://www.app-privacy-policy.com/live.php?token=vl39CeR62GnvR836JxiCGMU3rFLu7lUw',
+                    onPageFinished: (finish) {
+                    setState(() {
+                      isLoading = false;
+                    });
+                  }, ),
+                   isLoading
                 ? Center(
                     child:  LoadingAnimationWidget
                                                                 .beat(
@@ -49,6 +50,7 @@ class _RulesState extends State<Rules> {
                 : Stack()
           ],
         ),
+        
       ),
     );
   }

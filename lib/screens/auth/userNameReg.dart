@@ -208,12 +208,13 @@ class _UserNameRegState extends State<UserNameReg> {
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(Icons.arrow_right_outlined),
-                      Text(
-                        'رجوع',
+                        Text(
+                        'عودة',
                         style: TextStyle(
                             fontSize: 15.sp, fontWeight: FontWeight.normal),
                       ),
+                      Icon(Icons.arrow_right_outlined),
+                    
                     ],
                   ),
                   style: ElevatedButton.styleFrom(

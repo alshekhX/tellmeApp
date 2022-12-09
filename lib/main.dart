@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -17,6 +18,7 @@ import 'package:provider/provider.dart';
 import 'package:tell_me/screens/introScreen.dart';
 import 'package:tell_me/screens/splashScreen.dart';
 import 'package:tell_me/util/ad_helper.dart';
+import 'package:tell_me/util/pushNoti.dart';
 
 AppOpenAd? myAppOpenAd;
 
@@ -33,9 +35,15 @@ loadAppOpenAd() {
       orientation: AppOpenAd.orientationPortrait);
 }
 
-void main() async {
+Future init() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+}
 
-  await WidgetsFlutterBinding.ensureInitialized();
+void main() async {
+  await init();
+
+  // await WidgetsFlutterBinding.ensureInitialized();
 
   MobileAds.instance
     ..initialize()
@@ -103,15 +111,34 @@ class _MyHomePageState extends State<MyHomePage> {
   bool alredyLogged = false;
   bool firstTime = false;
   SharedPreferences? prefs;
-  
+
+  //pushnotification
+   String notificationTitle = 'No Title';
+  String notificationBody = 'No Body';
+  String notificationData = 'No Data';
 
 
   @override
   void initState() {
 
+    //notiii
+    final firebaseMessaging = FCM();
+    firebaseMessaging.setNotifications();
+    
+    firebaseMessaging.streamCtlr.stream.listen(_changeData);
+    firebaseMessaging.bodyCtlr.stream.listen(_changeBody);
+    firebaseMessaging.titleCtlr.stream.listen(_changeTitle);
+
     // TODO: implement initState
     super.initState();
   }
+
+
+  //notiiiii
+  _changeData(String msg) => setState(() => notificationData = msg);
+  _changeBody(String msg) => setState(() => notificationBody = msg);
+  _changeTitle(String msg) => setState(() => notificationTitle = msg);
+
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done

@@ -53,9 +53,9 @@ class _PasswordRegistrationState extends State<PasswordRegistration> {
               height: 10.sp,
             ),
             Text(
-              ' يجب الا تقل كلمة السر عن ستة رموز ويحبذ استخدام الارقام لزيادة الامان',
+              ' يجب الا تقل كلمة السر عن ستة رموز, إستخدم خليط من الأرقام والحروف لزيادة درجة الأمان ',
               style: TextStyle(
-                  fontSize: 15.sp,
+                  fontSize: 12.sp,
                   fontWeight: FontWeight.normal,
                   color: Colors.grey),
             ),
@@ -72,7 +72,7 @@ class _PasswordRegistrationState extends State<PasswordRegistration> {
                     return 'لا تترك هذا الحقل فارغا';
                   }
                   if (value.length < 6) {
-                    return "يجب ان لا تقل كلمة السر عن ستة حروف";
+                    return "يجب ان لا تقل كلمة السر عن ستة رموز";
                   }
                 },
 
@@ -141,15 +141,16 @@ class _PasswordRegistrationState extends State<PasswordRegistration> {
                 ),
                 Spacer(),
                 ElevatedButton(
-                  child: Row(
+                  child:Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(Icons.arrow_right_outlined),
-                      Text(
-                        'رجوع',
+                        Text(
+                        'عودة',
                         style: TextStyle(
                             fontSize: 15.sp, fontWeight: FontWeight.normal),
                       ),
+                      Icon(Icons.arrow_right_outlined),
+                    
                     ],
                   ),
                   style: ElevatedButton.styleFrom(

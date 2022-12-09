@@ -3,6 +3,7 @@ import 'dart:typed_data';
 
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_sound/flutter_sound.dart';
@@ -48,7 +49,6 @@ class _RecorderScreenState extends State<RecorderScreen> {
     iniRecorder();
     updateUserNotification();
 
-
     // TODO: implement initState
     super.initState();
   }
@@ -63,10 +63,7 @@ class _RecorderScreenState extends State<RecorderScreen> {
       createTutorial();
       Future.delayed(Duration(seconds: 1), showTutorial);
       prefs.setInt('recorderT', 2);
-    } else if (prefs.getInt('recorderT') == 2) {
-
-
-    }
+    } else if (prefs.getInt('recorderT') == 2) {}
     // createTutorial();
     // Future.delayed(Duration(seconds: 2), showTutorial);
   }
@@ -160,520 +157,523 @@ class _RecorderScreenState extends State<RecorderScreen> {
         resizeToAvoidBottomInset: false,
         body: SafeArea(
           child: Center(
-            child: isRecorderReady
-                ? Column(
-                    children: [
-                      Row(
-                        children: [
-                          Align(
-                              alignment: Alignment.centerLeft,
-                              child: Consumer<AuthProvider>(
-                                builder: (context, userLikesProvider, _) {
-                                  List<Record> likes =
-                                      userLikesProvider.user!.records!;
-                                  List<FocusedMenuItem> likesWidget = likes.reversed.toList()
-                                      .where((element) => element.likes != 0)
-                                      .toList()
-                                      .map(
-                                        (e) => FocusedMenuItem(
-                                            title: RichText(
-                                              text: TextSpan(
-                                                  text: e.likes.toString(),
-                                                  style: GoogleFonts.tajawal(
-                                                    color: Colors.black,
-                                                    fontSize: 11.sp,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                  children: <TextSpan>[
-                                                    TextSpan(
-                                                      text: '  إعجاب في تسجيل ',
-                                                      style:
-                                                          GoogleFonts.tajawal(
-                                                              color: Colors.grey
-                                                                  .shade700,
-                                                              fontSize: 8.sp,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .normal),
+              child: isRecorderReady
+                  ? Column(
+                      children: [
+                        Row(
+                          children: [
+                            Align(
+                                alignment: Alignment.centerLeft,
+                                child: Consumer<AuthProvider>(
+                                  builder: (context, userLikesProvider, _) {
+                                    List<Record> likes =
+                                        userLikesProvider.user!.records!;
+                                    List<FocusedMenuItem> likesWidget = likes
+                                        .reversed
+                                        .toList()
+                                        .where((element) => element.likes != 0)
+                                        .toList()
+                                        .map(
+                                          (e) => FocusedMenuItem(
+                                              title: RichText(
+                                                text: TextSpan(
+                                                    text: e.likes.toString(),
+                                                    style: GoogleFonts.tajawal(
+                                                      color: Colors.black,
+                                                      fontSize: 11.sp,
+                                                      fontWeight:
+                                                          FontWeight.bold,
                                                     ),
-                                                    TextSpan(
-                                                      text: '${e.title!}',
-                                                      style:
-                                                          GoogleFonts.tajawal(
-                                                              color:
-                                                                  Colors.black,
-                                                              fontSize: 9.sp,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold),
-                                                    )
-                                                  ]),
-                                            ),
+                                                    children: <TextSpan>[
+                                                      TextSpan(
+                                                        text:
+                                                            '  إعجاب في تسجيل ',
+                                                        style:
+                                                            GoogleFonts.tajawal(
+                                                                color: Colors
+                                                                    .grey
+                                                                    .shade700,
+                                                                fontSize: 8.sp,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .normal),
+                                                      ),
+                                                      TextSpan(
+                                                        text: '${e.title!}',
+                                                        style:
+                                                            GoogleFonts.tajawal(
+                                                                color: Colors
+                                                                    .black,
+                                                                fontSize: 9.sp,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold),
+                                                      )
+                                                    ]),
+                                              ),
 
-                                            //  Text(
-                                            //   '  ${e.likes.toString()} إعجاب في تسجيل ${e.title!}',
-                                            //   style: TextStyle(fontSize: 11.sp),
-                                            // ),
-                                            trailingIcon: Icon(
-                                                Ionicons.heart_circle,
-                                                color: Color.fromRGBO(
-                                                    131, 111, 129, 1)),
-                                            onPressed: () {
-                                              Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          HomePage()));
-                                            }),
-                                      )
-                                      .toList();
-                                  int likesCount = 0;
-                                  for (int i = 0; i < likes.length; i++) {
-                                    likesCount = likesCount + likes[i].likes!;
-                                  }
-
-                              
+                                              //  Text(
+                                              //   '  ${e.likes.toString()} إعجاب في تسجيل ${e.title!}',
+                                              //   style: TextStyle(fontSize: 11.sp),
+                                              // ),
+                                              trailingIcon: Icon(
+                                                  Ionicons.heart_circle,
+                                                  color: Color.fromRGBO(
+                                                      131, 111, 129, 1)),
+                                              onPressed: () {}),
+                                        )
+                                        .toList();
+                                    int likesCount = 0;
+                                    for (int i = 0; i < likes.length; i++) {
+                                      likesCount = likesCount + likes[i].likes!;
+                                    }
 
 
-
-    likesWidget.add(
-                                    FocusedMenuItem(
-                                        title: RichText(
-                                          text: TextSpan(
-                                            text: 'الإعدادات',
-                                            style: GoogleFonts.tajawal(
-                                              color: Colors.grey.shade700,
-                                              fontSize: 11.sp,
-                                              fontWeight: FontWeight.bold,
+                                    likesWidget.add(
+                                      FocusedMenuItem(
+                                          title: RichText(
+                                            text: TextSpan(
+                                              text: 'الإعدادات',
+                                              style: GoogleFonts.tajawal(
+                                                color: Colors.grey.shade700,
+                                                fontSize: 11.sp,
+                                                fontWeight: FontWeight.bold,
+                                              ),
                                             ),
                                           ),
+
+                                          //  Text(
+                                          //   '  ${e.likes.toString()} إعجاب في تسجيل ${e.title!}',
+                                          //   style: TextStyle(fontSize: 11.sp),
+                                          // ),
+                                          trailingIcon: Icon(
+                                              Ionicons.log_out_outline,
+                                              color: Colors.grey.shade700),
+                                          onPressed: () async {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        Settings()));
+                                          }),
+                                    );
+
+                                    return FocusedMenuHolder(
+                                      key: notiicationKey,
+                                      openWithTap:
+                                          true, // Open Focused-Menu on Tap rather than Long Press
+
+                                      menuItems: likesWidget,
+                                      onPressed: () async {
+                                        await userLikesProvider.getUserData();
+
+                                        setState(() {});
+                                      },
+
+                                      child: Padding(
+                                        padding: EdgeInsets.all(15.sp),
+                                        child: Stack(
+                                          children: [
+                                            Icon(
+                                              Icons.notifications,
+                                              size: 20.sp,
+                                              color: Colors.white,
+                                            ),
+                                            Positioned(
+                                                top: 0,
+                                                left: 0,
+                                                child: CircleAvatar(
+                                                  radius: 7,
+                                                  backgroundColor:
+                                                      Color(0xff836F81),
+                                                  child: Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            1.0),
+                                                    child: AutoSizeText(
+                                                      likesCount >= 1000
+                                                          ?  (likesCount / 1000).toInt()
+                                                                  .toString()+ "k"
+                                                             
+                                                          : likesCount
+                                                              .toString(),
+                                                              maxLines: 1,
+                                                      minFontSize: 4,
+                                                      maxFontSize: 8,
+                                                    ),
+                                                  ),
+                                                ))
+                                          ],
                                         ),
-
-                                        //  Text(
-                                        //   '  ${e.likes.toString()} إعجاب في تسجيل ${e.title!}',
-                                        //   style: TextStyle(fontSize: 11.sp),
-                                        // ),
-                                        trailingIcon: Icon(
-                                            Ionicons.log_out_outline,
-                                            color: Colors.grey.shade700),
-                                        onPressed: () async {
-
-                                          Navigator.push(context, MaterialPageRoute(builder: (context)=>Settings()));
-                                           }),
-                                  );
-                              
-
-
-
-
-
-                                  return FocusedMenuHolder(
-                                    key: notiicationKey,
-                                    openWithTap:
-                                        true, // Open Focused-Menu on Tap rather than Long Press
-
-                                    menuItems: likesWidget,
-                                    onPressed: () async {
-                                      await userLikesProvider.getUserData();
-
-                                      setState(() {});
-                                    },
-
-                                    child: Padding(
-                                      padding: EdgeInsets.all(15.sp),
-                                      child: Stack(
-                                        children: [
-                                          Icon(
-                                            Icons.notifications,
-                                            size: 20.sp,
-                                            color: Colors.white,
-                                          ),
-                                          Positioned(
-                                              top: 0,
-                                              left: 0,
-                                              child: CircleAvatar(
-                                                radius: 7,
-                                                backgroundColor:
-                                                    Color(0xff836F81),
-                                                child: Text(
-                                                  likesCount.toString(),
-                                                  style:
-                                                      TextStyle(fontSize: 7.sp),
-                                                ),
-                                              ))
-                                        ],
                                       ),
+                                    );
+                                  },
+                                )),
+                            Spacer(),
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: InkWell(
+                                key: lllistKey,
+                                onTap: () {
+                                  Navigator.pushReplacement(
+                                      context,
+                                      PageTransition(
+                                          type: PageTransitionType.topToBottom,
+                                          child: HomePage(),
+                                          childCurrent: RecorderScreen()));
+                                },
+                                child: Padding(
+                                  padding: EdgeInsets.all(15.sp),
+                                  child: Icon(
+                                    Icons.menu,
+                                    size: 20.sp,
+                                    color: Colorss.recordertimerColor,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 5.h,
+                        ),
+                        SizedBox(
+                          height: 10.h,
+                          child: !recorder.isRecording
+                              ? DefaultTextStyle(
+                                  style: TextStyle(
+                                    fontSize: 30.sp,
+                                    fontWeight: FontWeight.w300,
+                                    color: Colors.white,
+                                    shadows: [
+                                      Shadow(
+                                        blurRadius: 7.0,
+                                        color: Colors.white,
+                                        offset: Offset(0, 0),
+                                      ),
+                                    ],
+                                  ),
+                                  child: AnimatedTextKit(
+                                    repeatForever: true,
+                                    animatedTexts: [
+                                      FlickerAnimatedText(user!.username!,
+                                          textStyle: TextStyle()),
+                                    ],
+                                    onTap: () {
+                                      print("Tap Event");
+                                    },
+                                  ),
+                                )
+                              : Container(),
+                        ),
+                        SizedBox(
+                          height: 2.h,
+                        ),
+                        Container(
+                          height: 120.sp,
+                          width: 120.sp,
+                          child: FloatingActionButton(
+                              backgroundColor:
+                                  Colorss.recorderfloatingbackground,
+                              elevation: 0,
+                              onPressed: () async {
+                                if (!recorder.isRecording) {
+                                  await player.stopPlayer();
+
+                                  await startRecording();
+                                  setState(() {});
+                                } else if (recorder.isRecording) {
+                                  await stopRecording();
+                                  setState(() {});
+                                } else if (player.isPlaying == true) {
+                                  await player.stopPlayer();
+                                  await startRecording();
+                                  setState(() {});
+                                } else {
+                                  await startRecording();
+                                }
+                              },
+                              child: player.isPlaying
+                                  ? Consumer<RecordProvider>(
+                                      builder: ((context, value, _) {
+                                        return Container(
+                                            child: Icon(
+                                          Ionicons.repeat,
+                                          size: 100.sp,
+                                          color: Colorss.recorderBackground,
+                                        )
+
+                                            // Lottie.asset(
+                                            //     'assets/lotti/speakerRecorder.json',
+                                            //     height: 200.sp,
+                                            //     width: 200.sp,
+                                            //     animate: value.lottiAnime),
+
+                                            );
+                                      }),
+                                    )
+                                  : recorder.isRecording
+                                      ? Icon(
+                                          Ionicons.stop,
+                                          color: Colorss.recorderfloatingIcon,
+                                          size: 90.sp,
+                                        )
+                                      : Icon(
+                                          Ionicons.mic,
+                                          color: Colorss.recorderfloatingIcon,
+                                          size: 100.sp,
+                                          key: recordKey,
+                                        )
+
+                              // Image.asset(
+                              //     'assets/images/microphone3.png',
+                              //     height: 100.sp,
+                              //     key: recordKey,
+                              //   )
+
+                              // Icon(
+                              //     Icons.mic,
+                              //     color: Colorss.recorderfloatingIcon,
+                              //     size: 100.sp,
+                              //   )
+
+                              ),
+                        ),
+                        SizedBox(
+                          height: 3.h,
+                        ),
+
+                        player.isPlaying == true || player.isPaused == true
+                            ? StreamBuilder<PlaybackDisposition>(
+                                builder: (context, snapShot) {
+                                  final durationState = snapShot.data;
+                                  final progress = snapShot.data == null
+                                      ? Duration.zero
+                                      : snapShot.data!.position;
+
+                                  final total =
+                                      durationState?.duration ?? Duration.zero;
+
+                                  return Container(
+                                    width: 70.w,
+                                    child: ProgressBar(
+                                      thumbColor: Color(0xffF2962F),
+                                      progressBarColor: Color(0xffF2962F),
+                                      baseBarColor:
+                                          Color(0xffF2962F).withOpacity(.7),
+                                      progress: progress,
+                                      barHeight: 1.sp,
+                                      total: total,
+                                      timeLabelTextStyle: TextStyle(
+                                          color: Colorss.recordertext),
+                                      onSeek: (duration) async {
+                                        if (player.isStopped) {
+                                          await player.startPlayer(
+                                              fromDataBuffer: record);
+
+                                          await player.seekToPlayer(duration);
+                                          setState(() {});
+                                        } else {
+                                          await player.seekToPlayer(duration);
+                                          setState(() {});
+                                        }
+                                      },
                                     ),
                                   );
                                 },
-                              )),
-                          Spacer(),
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: InkWell(
-                              key: lllistKey,
-                              onTap: () {
-                                Navigator.pushReplacement(
-                                    context,
-                                    PageTransition(
-                                        type: PageTransitionType.topToBottom,
-                                        child: HomePage(),
-                                        childCurrent: RecorderScreen()));
-                              },
-                              child: Padding(
-                                padding: EdgeInsets.all(15.sp),
-                                child: Icon(
-                                  Icons.menu,
-                                  size: 20.sp,
-                                  color: Colorss.recordertimerColor,
-                                ),
+                                stream: player.onProgress,
+                              )
+                            : StreamBuilder<RecordingDisposition>(
+                                builder: (context, snapShot) {
+                                  final duration = snapShot.hasData
+                                      ? snapShot.data!.duration
+                                      : Duration.zero;
+                                  String twoDigit(int n) =>
+                                      n.toString().padLeft(2, '0');
+
+                                  final twoDigitMinits = twoDigit(
+                                      duration.inMinutes.remainder(60));
+
+                                  final twoDigitSecound = twoDigit(
+                                      duration.inSeconds.remainder(60));
+
+                                  if (duration.inSeconds >= 120) {
+                                    stopRecording();
+                                  }
+                                  return Text(
+                                    '$twoDigitMinits:$twoDigitSecound',
+                                    style: TextStyle(
+                                        color: Colorss.recordertimerColor,
+                                        fontSize: 30.sp),
+                                  );
+                                },
+                                stream: recorder.onProgress,
                               ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 5.h,
-                      ),
-                      SizedBox(
-                        height: 10.h,
-                        child: !recorder.isRecording
-                            ? DefaultTextStyle(
-                                style: GoogleFonts.lalezar(
-                                  fontSize: 30.sp,
-                                  color: Colors.white,
-                                  shadows: [
-                                    Shadow(
-                                      blurRadius: 7.0,
-                                      color: Colors.white,
-                                      offset: Offset(0, 0),
-                                    ),
+
+                        // Container(
+                        //   child: TextField(controller: titleC),
+                        // ),
+                        recorder.isRecording
+                            ? Lottie.asset(
+                                'assets/lotti/waves.json',
+                                delegates: LottieDelegates(
+                                  values: [
+                                    ValueDelegate.color(
+                                        ['recording spectrum_MAIN', 'fill'],
+                                        value: Colors.black),
                                   ],
                                 ),
-                                child: AnimatedTextKit(
-                                  repeatForever: true,
-                                  animatedTexts: [
-                                    FlickerAnimatedText(user!.username!,textStyle: TextStyle()),
-                                    
-                                  ],
-                                  onTap: () {
-                                    print("Tap Event");
-                                  },
-                                ),
+                                width: 50.w,
+                                height: 25.h,
+                                fit: BoxFit.fill,
                               )
                             : Container(),
-                      ),
-                      SizedBox(
-                        height: 2.h,
-                      ),
-                      Container(
-                        height: 120.sp,
-                        width: 120.sp,
-                        child: FloatingActionButton(
-                          
-                            backgroundColor: Colorss.recorderfloatingbackground,
-                            elevation: 0,
-                            onPressed: () async {
-                              if (!recorder.isRecording) {
-                                await player.stopPlayer();
-
-                                await startRecording();
-                                setState(() {});
-                              } else if (recorder.isRecording) {
-                                await stopRecording();
-                                setState(() {});
-                              } else if (player.isPlaying == true) {
-                                await player.stopPlayer();
-                                await startRecording();
-                                setState(() {});
-                              } else {
-                                await startRecording();
-                              }
-                            },
-                            child: player.isPlaying
-                                ? Consumer<RecordProvider>(
-                                    builder: ((context, value, _) {
-                                      return Container(
-                                        child: Icon(Ionicons.repeat,size: 100.sp,color: Colorss.recorderBackground,)
-                                        
-                                        // Lottie.asset(
-                                        //     'assets/lotti/speakerRecorder.json',
-                                        //     height: 200.sp,
-                                        //     width: 200.sp,
-                                        //     animate: value.lottiAnime),
-
-
-
-                                      );
-                                    }),
-                                  )
-                                : recorder.isRecording
-                                    ? Icon(
-                                        Ionicons.stop,
-                                        color: Colorss.recorderfloatingIcon,
-                                        size: 90.sp,
-                                      )
-                                    : 
-                                    Icon(
-                                        Ionicons.mic,
-                                        color: Colorss.recorderfloatingIcon,
-                                        size: 100.sp,
-                                        key: recordKey,
-
-                                      )
-                                    
-                                    // Image.asset(
-                                    //     'assets/images/microphone3.png',
-                                    //     height: 100.sp,
-                                    //     key: recordKey,
-                                    //   )
-
-                            // Icon(
-                            //     Icons.mic,
-                            //     color: Colorss.recorderfloatingIcon,
-                            //     size: 100.sp,
-                            //   )
-
-                            ),
-                      ),
-                      SizedBox(
-                        height: 3.h,
-                      ),
-
-                      player.isPlaying == true || player.isPaused == true
-                          ? StreamBuilder<PlaybackDisposition>(
-                              builder: (context, snapShot) {
-                                final durationState = snapShot.data;
-                                final progress = snapShot.data == null
-                                    ? Duration.zero
-                                    : snapShot.data!.position;
-
-                                final total =
-                                    durationState?.duration ?? Duration.zero;
-
-                                return Container(
-                                  width: 70.w,
-                                  child: ProgressBar(
-                                    thumbColor:
-                                        Color(0xffF2962F),
-                                    progressBarColor: Color(0xffF2962F),
-                                    baseBarColor:
-                                        Color(0xffF2962F).withOpacity(.7),
-                                    progress: progress,
-                                    barHeight: 1.sp,
-                                    total: total,
-                                    timeLabelTextStyle:
-                                        TextStyle(color: Colorss.recordertext),
-                                    onSeek: (duration) async {
-                                      if (player.isStopped) {
-                                        await player.startPlayer(
-                                            fromDataBuffer: record);
-
-                                        await player.seekToPlayer(duration);
-                                        setState(() {});
-                                      } else {
-                                        await player.seekToPlayer(duration);
-                                        setState(() {});
-                                      }
-                                    },
-                                  ),
-                                );
-                              },
-                              stream: player.onProgress,
-                            )
-                          : StreamBuilder<RecordingDisposition>(
-                              builder: (context, snapShot) {
-                                final duration = snapShot.hasData
-                                    ? snapShot.data!.duration
-                                    : Duration.zero;
-                                String twoDigit(int n) =>
-                                    n.toString().padLeft(2, '0');
-
-                                final twoDigitMinits =
-                                    twoDigit(duration.inMinutes.remainder(60));
-
-                                final twoDigitSecound =
-                                    twoDigit(duration.inSeconds.remainder(60));
-
-                                if (duration.inSeconds >= 120) {
-                                  stopRecording();
-                                }
-                                return Text(
-                                  '$twoDigitMinits:$twoDigitSecound',
-                                  style: TextStyle(
-                                      color: Colorss.recordertimerColor,
-                                      fontSize: 30.sp),
-                                );
-                              },
-                              stream: recorder.onProgress,
-                            ),
-
-                      // Container(
-                      //   child: TextField(controller: titleC),
-                      // ),
-                      recorder.isRecording
-                          ? Lottie.asset(
-                              'assets/lotti/waves.json',
-                              delegates: LottieDelegates(
-                                values: [
-                                  ValueDelegate.color(
-                                      ['recording spectrum_MAIN', 'fill'],
-                                      value: Colors.black),
-                                ],
-                              ),
-                              width: 50.w,
-                              height: 25.h,
-                              fit: BoxFit.fill,
-                            )
-                          : Container(),
-                      Spacer(),
-                      recorder.isRecording == false && record != null
-                          ? Container(
-                              width: 140.sp,
-                              child: ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    elevation: 10,
-                                    primary: Colorss.recordertimerColor,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(25),
-                                      side: BorderSide(
-                                          width: 1.0, color: Colors.white),
+                        Spacer(),
+                        recorder.isRecording == false && record != null
+                            ? Container(
+                                width: 140.sp,
+                                child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      elevation: 10,
+                                      primary: Colorss.recordertimerColor,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(25),
+                                        side: BorderSide(
+                                            width: 1.0, color: Colors.white),
+                                      ),
                                     ),
-                                  ),
-                                  onPressed: () async {
-                                    if (player.isPlaying) {
-                                      await player.stopPlayer();
-                                    }
+                                    onPressed: () async {
+                                      if (player.isPlaying) {
+                                        await player.stopPlayer();
+                                      }
 
-                                    await NAlertDialog(
-                                      dialogStyle:
-                                          DialogStyle(titleDivider: false),
-                                      title: Text(
-                                        "اكتب عنونا للتسجيل",
-                                        style: GoogleFonts.tajawal(
-                                            color: Colorss.dialogtext),
-                                      ),
-                                      content: TextField(
-                                        controller: titleC,
-                                        inputFormatters: [
-                                          LengthLimitingTextInputFormatter(18),
-                                        ],
-                                        decoration: InputDecoration(
-                                            contentPadding:
-                                                EdgeInsets.symmetric(
-                                                    vertical: 0,
-                                                    horizontal: 2.w),
-                                            enabledBorder: OutlineInputBorder(
-                                              borderSide: BorderSide(
-                                                  color: Colors.grey
-                                                      .withOpacity(.6),
-                                                  width: 1),
-                                            ),
-                                            labelText: 'العنوان',
-                                            labelStyle: GoogleFonts.tajawal(
-                                                fontSize: 10.sp,
-                                                color: Color(0xffB9B9B9),
-                                                fontWeight: FontWeight.w400)),
-                                      ),
-                                      actions: <Widget>[
-                                        TextButton(
-                                            child: Text(
-                                              "إرسال التسجيل",
-                                              style: GoogleFonts.tajawal(
-                                                  color: Color.fromARGB(
-                                                      247, 78, 162, 120),fontSize: 12.sp
-                                                      ),
-                                            ),
-                                            onPressed: () async {
-                                              CustomProgressDialog
-                                                  progressDialog =
-                                                  CustomProgressDialog(context,
-                                                      blur: 30,
-                                                      loadingWidget: Container(
-                                                          decoration: BoxDecoration(
-                                                              color:
-                                                                  Colors.white,
-                                                              border: Border.all(
+                                      await NAlertDialog(
+                                        dialogStyle:
+                                            DialogStyle(titleDivider: false),
+                                        title: Text(
+                                          "اكتب عنونا للتسجيل",
+                                          style: GoogleFonts.tajawal(
+                                              color: Colorss.dialogtext),
+                                        ),
+                                        content: TextField(
+                                          controller: titleC,
+                                          inputFormatters: [
+                                            LengthLimitingTextInputFormatter(
+                                                18),
+                                          ],
+                                          decoration: InputDecoration(
+                                              contentPadding:
+                                                  EdgeInsets.symmetric(
+                                                      vertical: 0,
+                                                      horizontal: 2.w),
+                                              enabledBorder: OutlineInputBorder(
+                                                borderSide: BorderSide(
+                                                    color: Colors.grey
+                                                        .withOpacity(.6),
+                                                    width: 1),
+                                              ),
+                                              labelText: 'العنوان',
+                                              labelStyle: GoogleFonts.tajawal(
+                                                  fontSize: 10.sp,
+                                                  color: Color(0xffB9B9B9),
+                                                  fontWeight: FontWeight.w400)),
+                                        ),
+                                        actions: <Widget>[
+                                          TextButton(
+                                              child: Text(
+                                                "إرسال التسجيل",
+                                                style: GoogleFonts.tajawal(
+                                                    color: Color.fromARGB(
+                                                        247, 78, 162, 120),
+                                                    fontSize: 12.sp),
+                                              ),
+                                              onPressed: () async {
+                                                CustomProgressDialog progressDialog = CustomProgressDialog(
+                                                    context,
+                                                    blur: 30,
+                                                    loadingWidget: Container(
+                                                        decoration: BoxDecoration(
+                                                            color: Colors.white,
+                                                            border: Border.all(
+                                                                color: Colorss
+                                                                    .recorderBackground),
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        20)),
+                                                        child: Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(25),
+                                                          child: LoadingAnimationWidget
+                                                              .staggeredDotsWave(
                                                                   color: Colorss
-                                                                      .recorderBackground),
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          20)),
-                                                          child: Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(25),
-                                                            child: LoadingAnimationWidget
-                                                                .staggeredDotsWave(
-                                                                    color: Colorss
-                                                                        .recorderBackground,
-                                                                    size:
-                                                                        40.sp),
-                                                          )));
-                                              progressDialog.show();
+                                                                      .recorderBackground,
+                                                                  size: 40.sp),
+                                                        )));
+                                                progressDialog.show();
 
-                                              String token =
-                                                  Provider.of<AuthProvider>(
-                                                          context,
-                                                          listen: false)
-                                                      .token!;
+                                                String token =
+                                                    Provider.of<AuthProvider>(
+                                                            context,
+                                                            listen: false)
+                                                        .token!;
 
-                                              String res = await Provider.of<
-                                                          RecordProvider>(
-                                                      context,
-                                                      listen: false)
-                                                  .createRecord(titleC.text,
-                                                      record, token);
-                                              progressDialog.dismiss();
+                                                String res = await Provider.of<
+                                                            RecordProvider>(
+                                                        context,
+                                                        listen: false)
+                                                    .createRecord(titleC.text,
+                                                        record, token);
+                                                progressDialog.dismiss();
 
-                                              print(res);
+                                                print(res);
 
-                                              if (res == 'success') {
+                                                if (res == 'success') {
+                                                  Navigator.pop(context);
+
+                                                  alertDialog(
+                                                      'تمت العملية',
+                                                      "تم رفع تسجيلك بنجاح ",
+                                                      true);
+                                                } else {
+                                                  Navigator.pop(context);
+
+                                                  alertDialog(
+                                                      'فشلت العملية',
+                                                      "لم يتم عمل م يتم ,شوف قصة زي الناس وحاول مجددا",
+                                                      false);
+                                                }
+                                              }),
+                                          TextButton(
+                                              child: Text(
+                                                "إعادة التسجيل",
+                                                style: GoogleFonts.tajawal(
+                                                    color: Color(0xff00A4EA),
+                                                    fontSize: 12.sp),
+                                              ),
+                                              onPressed: () async {
                                                 Navigator.pop(context);
-
-                                                alertDialog(
-                                                    'تمت العملية',
-                                                    "تم رفع تسجيلك بنجاح ",
-                                                    true);
-                                              } else {
-                                                Navigator.pop(context);
-
-                                                alertDialog(
-                                                    'فشلت العملية',
-                                                    "لم يتم عمل م يتم ,شوف قصة زي الناس وحاول مجددا",
-                                                    false);
-                                              }
-                                            }),
-                                        TextButton(
-                                            child: Text(
-                                              "إعادة التسجيل",
-                                              style: GoogleFonts.tajawal(
-                                                  color: Color(0xff00A4EA),fontSize: 12.sp),
-                                            ),
-                                            onPressed: () async {
-                                              Navigator.pop(context);
-                                              await startRecording();
-                                            }),
-                                      ],
-                                    ).show(context);
-                                  },
-                                  child: Text(
-                                    'حفظ',
-                                    style: TextStyle(
-                                        color: Colorss.buttontext,
-                                        fontSize: 16.sp),
-                                  )),
-                            )
-                          : Container(),
-                      SizedBox(
-                        height: 3.h,
-                      )
-                    ],
-                  )
-                :LoadingAnimationWidget.beat(
-                        color: Colorss.recorderText, size: 40.sp)
-          ),
+                                                await startRecording();
+                                              }),
+                                        ],
+                                      ).show(context);
+                                    },
+                                    child: Text(
+                                      'حفظ',
+                                      style: TextStyle(
+                                          color: Colorss.buttontext,
+                                          fontSize: 16.sp),
+                                    )),
+                              )
+                            : Container(),
+                        SizedBox(
+                          height: 3.h,
+                        )
+                      ],
+                    )
+                  : LoadingAnimationWidget.beat(
+                      color: Colorss.recorderText, size: 40.sp)),
         ),
       ),
     );

@@ -9,6 +9,7 @@ import 'package:ionicons/ionicons.dart';
 import 'package:ndialog/ndialog.dart';
 
 import 'package:provider/provider.dart';
+import 'package:share_plus/share_plus.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -18,6 +19,8 @@ import 'package:settings_ui/settings_ui.dart';
 
 import 'package:tell_me/screens/classes/colors.dart';
 import 'package:tell_me/screens/rulesScreen.dart';
+import 'package:tell_me/screens/terms.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../provider/auth.dart';
 import 'package:about/about.dart';
@@ -55,6 +58,7 @@ class _SettingsState extends State<Settings> {
           content: Text(text, style: GoogleFonts.tajawal())));
     }
   }
+
 
   GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey();
 
@@ -141,11 +145,11 @@ class _SettingsState extends State<Settings> {
                 },
               ),
             ),
-                   Directionality(
+            Directionality(
               textDirection: TextDirection.rtl,
               child: ListTile(
                 trailing: Icon(
-                  Ionicons.information_circle_outline,
+                  Ionicons.person_circle_outline,
                   color: Color(0xff212427),
                 ),
                 title: Text(
@@ -158,7 +162,39 @@ class _SettingsState extends State<Settings> {
                 },
               ),
             ),
-      
+            Directionality(
+              textDirection: TextDirection.rtl,
+              child: ListTile(
+                trailing: Icon(
+                  Ionicons.checkmark_circle_outline,
+                  color: Color(0xff212427),
+                ),
+                title: Text(
+                  ' الشروط والأحكام',
+                  style: TextStyle(),
+                ),
+                onTap: () async {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => Terms()));
+                },
+              ),
+            ),
+            Directionality(
+              textDirection: TextDirection.rtl,
+              child: ListTile(
+                trailing: Icon(
+                  Ionicons.share_social_outline,
+                  color: Color(0xff212427),
+                ),
+                title: Text(
+                  ' مشاركة التطبيق',
+                  style: TextStyle(),
+                ),
+                onTap: () async {
+Share.share('https://play.google.com/store/apps/details?id=com.alshekh.tell_me');
+                },
+              ),
+            ),
             Container(
               width: size.width * .9,
               child: Divider(
@@ -228,7 +264,7 @@ class _SettingsState extends State<Settings> {
                 },
               ),
             ),
-         ],
+          ],
         ),
       ),
     );

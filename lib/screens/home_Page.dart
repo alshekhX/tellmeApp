@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'dart:ui';
 
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:auto_size_text/auto_size_text.dart';
@@ -49,6 +50,11 @@ class _HomePageState extends State<HomePage> {
     super.initState();
   }
 
+  lottiDidplay() async {
+    await Future.delayed(Duration(milliseconds: 500));
+    setState(() {});
+  }
+
   GlobalKey cardKey = GlobalKey();
   GlobalKey floatingbuttonkey = GlobalKey();
   GlobalKey listKey = GlobalKey();
@@ -91,14 +97,13 @@ class _HomePageState extends State<HomePage> {
     await Provider.of<RecordProvider>(context, listen: false).getRecords(1);
     records = Provider.of<RecordProvider>(context, listen: false).records;
     audioPlayer.clear();
+    print(records);
 
     for (int i = 0; i < records!.length; i++) {
       audioPlayer.add(AudioPlayer());
     }
 
-    setState(() {
-      
-    });
+    setState(() {});
 
     // createTutorial();
     // showTutorial();
@@ -107,17 +112,11 @@ class _HomePageState extends State<HomePage> {
       createTutorial();
       showTutorial();
       prefs.setInt('homeT', 1);
-    }
-    else if(prefs.getInt('homeT')==1){
-
- createTutorial();
+    } else if (prefs.getInt('homeT') == 1) {
+      createTutorial();
       showTutorial();
       prefs.setInt('homeT', 2);
-
-    }
-    else if(prefs.getInt('homeT')==2){
-
-    }
+    } else if (prefs.getInt('homeT') == 2) {}
   }
 
   updateQuestion() async {
@@ -192,6 +191,7 @@ class _HomePageState extends State<HomePage> {
       setState(() {});
     }
     shimmer = false;
+    pageNumber = 1;
     setState(() {});
   }
 
@@ -281,11 +281,12 @@ class _HomePageState extends State<HomePage> {
                     onRefresh: _onRefresh,
                     enablePullUp: true,
                     footer: ClassicFooter(
-                      loadingIcon: LoadingAnimationWidget.discreteCircle(
-                          color: Color(0xff0288D1), size: 15.sp),
-                      canLoadingText: 'جاري تحميل تسجيلات إضافية',
+                      loadingIcon: LoadingAnimationWidget.threeArchedCircle(
+                          color: Colorss.recorderBackground, size: 20.sp),
+                      canLoadingText: '',
                       loadingText: "جاري التحميل",
-                      noDataText: 'لا توجد تسجيلات إضافية',
+                      noDataText: '',
+                      idleText: 'إسحب لأعلى',
                     ),
                     enablePullDown: true,
                     header: MaterialClassicHeader(
@@ -293,12 +294,11 @@ class _HomePageState extends State<HomePage> {
                     controller: _refreshController,
                     child: SingleChildScrollView(
                       child: Column(children: [
-                        Container(
-                        ),
+                        Container(),
                         Card(
                           borderOnForeground: true,
                           color: Colorss.mainCardBackGround,
-                          elevation: 5,
+                          elevation: 4,
                           child: Container(
                             key: cardKey,
                             width: 95.w,
@@ -311,7 +311,7 @@ class _HomePageState extends State<HomePage> {
                                       fontWeight: FontWeight.bold,
                                       color: Colorss.mainCardtext),
                                 )
-        
+
                                 //  DefaultTextStyle(
                                 //   style: GoogleFonts.tajawal(
                                 //       fontSize: 25.sp,
@@ -329,7 +329,7 @@ class _HomePageState extends State<HomePage> {
                                 //     },
                                 //   ),
                                 // ),
-        
+
                                 //  AutoSizeText(
                                 //   'وريني اكتر حاجة مهمة حصلت ليك الاسبوع الفات والسبب الخلاها مهمة شديد ',
                                 //   textDirection: TextDirection.rtl,
@@ -356,22 +356,25 @@ class _HomePageState extends State<HomePage> {
                                     if (recordP.records != null &&
                                         audioPlayer.isNotEmpty) {
                                       List<Widget> recordWidgets = [];
-                                 
-        
+
                                       for (int i = 0;
                                           i < records!.length;
                                           i++) {
                                         String type = 'شخص';
-        
+
                                         if (records![i].user == user.id) {
                                           type = 'أنت';
                                         }
                                         var r = Random();
-        String letter= String.fromCharCodes(List.generate(1, (index) => r.nextInt(33) + 89));
+                                        String letter = String.fromCharCodes(
+                                            List.generate(1,
+                                                (index) => r.nextInt(33) + 89));
                                         recordWidgets.add(
                                           AudioListTile(
                                             type: type,
-                                            title: records![i].title==null?'':records![i].title,
+                                            title: records![i].title == null
+                                                ? ''
+                                                : records![i].title,
                                             record: records![i].record,
                                             player: audioPlayer[i],
                                             id: records![i].id,
@@ -379,14 +382,46 @@ class _HomePageState extends State<HomePage> {
                                           ),
                                         );
                                       }
-        
-                                      return Column(
-                                        children: recordWidgets,
-                                      );
-                                    } else {
+                                      if (recordWidgets.isEmpty) {
+                                        return Center(
+                                          child: Column(children: [
+                                            Container(
+                                              width: 100.sp,
+                                              child: LottieBuilder.asset(
+                                                  'assets/lotti/first.json'),
+                                            ),
+                                            Text(
+                                              'كن أول تسجيل لهذا السؤال',
+                                              style: GoogleFonts.tajawal(
+                                                  color: Colors.grey,
+                                                  fontWeight: FontWeight.bold),
+                                            )
+                                          ]),
+                                        );
+                                      } else
+                                        return Column(
+                                          children: recordWidgets,
+                                        );
+                                    } else if (records != null) {
+                                      if (records!.isEmpty) {}
+
                                       return Center(
-                                          child: Container());
+                                        child: Column(children: [
+                                          Container(
+                                            width: 100.sp,
+                                            child: LottieBuilder.asset(
+                                                'assets/lotti/first.json'),
+                                          ),
+                                          Text(
+                                            'كن أول تسجيل لهذا السؤال',
+                                            style: GoogleFonts.tajawal(
+                                                color: Colors.grey,
+                                                fontWeight: FontWeight.bold),
+                                          )
+                                        ]),
+                                      );
                                     }
+                                    return Container();
                                   }
                                 }))
                       ]),
@@ -423,13 +458,9 @@ class _HomePageState extends State<HomePage> {
       setState(() {});
     }
 
-    if (Provider.of<RecordProvider>(context, listen: false).records!.isEmpty) {
-      _refreshController.loadNoData();
-    } else {
-      // if failed,use loadFailed(),if no data return,use LoadNodata()
-      if (mounted) setState(() {});
-      _refreshController.loadComplete();
-    }
+    // if failed,use loadFailed(),if no data return,use LoadNodata()
+    if (mounted) setState(() {});
+    _refreshController.loadComplete();
   }
 
   void showTutorial() {
@@ -470,7 +501,7 @@ class _HomePageState extends State<HomePage> {
     targets.add(
       TargetFocus(
         enableOverlayTab: true,
-        keyTarget: cardKey,
+        targetPosition: TargetPosition(Size(70.w, 10.h), Offset(15.w, 10.h)),
         alignSkip: Alignment.bottomLeft,
         contents: [
           TargetContent(
@@ -528,7 +559,7 @@ class _HomePageState extends State<HomePage> {
     targets.add(
       TargetFocus(
         enableOverlayTab: true,
-        targetPosition: TargetPosition(Size(70.w, 10.h) ,Offset(40.w, 45.h)),
+        targetPosition: TargetPosition(Size(70.w, 10.h), Offset(40.w, 45.h)),
         alignSkip: Alignment.topRight,
         contents: [
           TargetContent(
@@ -565,11 +596,11 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
     );
-    
+
     targets.add(
       TargetFocus(
         enableOverlayTab: true,
-        targetPosition: TargetPosition(Size(70.w, 10.h) ,Offset(20.w, 45.h)),
+        targetPosition: TargetPosition(Size(70.w, 10.h), Offset(20.w, 45.h)),
         alignSkip: Alignment.topRight,
         contents: [
           TargetContent(
@@ -588,7 +619,6 @@ class _HomePageState extends State<HomePage> {
                           fontWeight: FontWeight.w500,
                           fontSize: 16.sp),
                     ),
-
                   ],
                 ),
               )),
@@ -596,11 +626,10 @@ class _HomePageState extends State<HomePage> {
       ),
     );
 
-    
     targets.add(
       TargetFocus(
         enableOverlayTab: true,
-        targetPosition: TargetPosition(Size(75.w, 10.h) ,Offset(-10.w, 45.h)),
+        targetPosition: TargetPosition(Size(75.w, 10.h), Offset(-10.w, 45.h)),
         alignSkip: Alignment.topRight,
         contents: [
           TargetContent(
@@ -619,12 +648,14 @@ class _HomePageState extends State<HomePage> {
                           fontWeight: FontWeight.w500,
                           fontSize: 16.sp),
                     ),
-                    SizedBox(height: 1.h,),
+                    SizedBox(
+                      height: 1.h,
+                    ),
                     Image.asset(
-                            'assets/images/red_card1.png',
-                            height: 20.sp,
-                            width: 20.sp,
-                          ),
+                      'assets/images/red_card1.png',
+                      height: 20.sp,
+                      width: 20.sp,
+                    ),
                   ],
                 ),
               )),

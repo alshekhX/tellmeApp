@@ -9,6 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 import 'package:tell_me/screens/auth/passwordReg.dart';
 import 'package:tell_me/screens/home_Page.dart';
+import 'package:tell_me/screens/terms.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
@@ -26,8 +27,9 @@ class _ConfirmPassWordState extends State<ConfirmPassWord> {
   TextEditingController confirmPasswordC = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   bool? _isConnected;
-    bool _showPassword = false;
-     void _togglevisibility() {
+  bool _showPassword = false;
+  bool checkValue = false;
+  void _togglevisibility() {
     setState(() {
       _showPassword = !_showPassword;
     });
@@ -37,7 +39,7 @@ class _ConfirmPassWordState extends State<ConfirmPassWord> {
   Widget build(BuildContext context) {
     final userProvider = Provider.of<AuthProvider>(context, listen: false);
     return Scaffold(
-          resizeToAvoidBottomInset: false,//use this
+      resizeToAvoidBottomInset: false, //use this
 
       body: Padding(
         padding: EdgeInsets.fromLTRB(10.w, 10.h, 10.w, 10.h),
@@ -66,8 +68,7 @@ class _ConfirmPassWordState extends State<ConfirmPassWord> {
             SizedBox(
               child: TextFormField(
                 controller: confirmPasswordC,
-                                                                 obscureText: !_showPassword,
-
+                obscureText: !_showPassword,
                 validator: (value) {
                   if (value!.isEmpty) {
                     return 'لا تترك هذا الحقل فارغا';
@@ -78,14 +79,16 @@ class _ConfirmPassWordState extends State<ConfirmPassWord> {
                   }
                 },
                 decoration: InputDecoration(
-                     suffixIcon: GestureDetector(
-                                    onTap: () {
-                                      _togglevisibility();
-                                    },
-                                    child: Icon(
-                                      _showPassword ? Icons.visibility : Icons
-                                          .visibility_off, color: Colors.grey,size: 15.sp,),
-                                  ),
+                    suffixIcon: GestureDetector(
+                      onTap: () {
+                        _togglevisibility();
+                      },
+                      child: Icon(
+                        _showPassword ? Icons.visibility : Icons.visibility_off,
+                        color: Colors.grey,
+                        size: 15.sp,
+                      ),
+                    ),
                     contentPadding:
                         EdgeInsets.symmetric(vertical: 0, horizontal: 2.w),
                     enabledBorder: OutlineInputBorder(
@@ -112,7 +115,6 @@ class _ConfirmPassWordState extends State<ConfirmPassWord> {
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      
                       Text(
                         'تسجيل',
                         style: TextStyle(
@@ -122,82 +124,98 @@ class _ConfirmPassWordState extends State<ConfirmPassWord> {
                   ),
                   style: ElevatedButton.styleFrom(
                     elevation: 2,
-                    primary: Color(0xff5ABA8A),
+                    primary: checkValue == true
+                        ? Color(0xff5ABA8A)
+                        : Colors.grey.shade500,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(25),
                       side: BorderSide(width: 1.0, color: Colors.white),
                     ),
                   ),
                   onPressed: () async {
-                  CustomProgressDialog pr =
-                          CustomProgressDialog(context, blur: 30,loadingWidget: Container(
+                    CustomProgressDialog pr = CustomProgressDialog(context,
+                        blur: 30,
+                        loadingWidget: Container(
                             decoration: BoxDecoration(
-                                                          color: Colors.white,
-
-                              border: Border.all(color:Colorss.recorderBackground ),
-                              borderRadius: BorderRadius.circular(20)
-                            ),
-                            
+                                color: Colors.white,
+                                border: Border.all(
+                                    color: Colorss.recorderBackground),
+                                borderRadius: BorderRadius.circular(20)),
                             child: Padding(
                               padding: const EdgeInsets.all(25),
-                              child: LoadingAnimationWidget.staggeredDotsWave(color:Colorss.recorderBackground, size: 40.sp),
-                            )));if (_formKey.currentState!.validate()) {
-                      pr.show();
-
-                      String internetConn = await _checkInternetConnection();
-
-                      if (internetConn == 'false') {
-                        pr.dismiss();
-                        setState(() {});
-
+                              child: LoadingAnimationWidget.staggeredDotsWave(
+                                  color: Colorss.recorderBackground,
+                                  size: 40.sp),
+                            )));
+                    if (_formKey.currentState!.validate()) {
+                      if (checkValue == false) {
                         showTopSnackBar(
                           context,
                           CustomSnackBar.error(
-                            message: "تاكد من تشغيل بيانات الهاتف وحاول مجددا",
+                            message: "يجب الموافقة على الشروط والاحكام",
                           ),
                         );
                       } else {
-                        try {
-                          String res = await Provider.of<AuthProvider>(context,
-                                  listen: false)
-                              .registerUser(
-                                  userProvider.userName!.replaceAll(' ', ''),
-                                  userProvider.password!);
-                          print(res);
-                          if (res == 'success') {
-                            SharedPreferences prefs =
-                                await SharedPreferences.getInstance();
+                        pr.show();
 
-                            prefs.setString(
-                                'userToken',
-                                Provider.of<AuthProvider>(context,
-                                        listen: false)
-                                    .token!);
+                        String internetConn = await _checkInternetConnection();
 
-                            pr.dismiss();
-
-                            Navigator.of(context).pushAndRemoveUntil(
-                                MaterialPageRoute(
-                                    builder: (context) => HomePage()),
-                                (route) => false);
-                          } else {
-                            pr.dismiss();
-                            showTopSnackBar(
-                              context,
-                              CustomSnackBar.error(
-                                    message: "الخادم مشغول , الرجاء المحاولة مجددا",
-                              ),
-                            );
-                          }
-                        } catch (e) {
+                        if (internetConn == 'false') {
                           pr.dismiss();
+                          setState(() {});
 
                           showTopSnackBar(
                             context,
                             CustomSnackBar.error(
-                                    message: "الخادم مشغول , الرجاء المحاولة مجددا",
+                              message:
+                                  "تاكد من تشغيل بيانات الهاتف وحاول مجددا",
                             ),
                           );
+                        } else {
+                          try {
+                            String res = await Provider.of<AuthProvider>(
+                                    context,
+                                    listen: false)
+                                .registerUser(
+                                    userProvider.userName!.replaceAll(' ', ''),
+                                    userProvider.password!);
+                            print(res);
+                            if (res == 'success') {
+                              SharedPreferences prefs =
+                                  await SharedPreferences.getInstance();
+
+                              prefs.setString(
+                                  'userToken',
+                                  Provider.of<AuthProvider>(context,
+                                          listen: false)
+                                      .token!);
+
+                              pr.dismiss();
+
+                              Navigator.of(context).pushAndRemoveUntil(
+                                  MaterialPageRoute(
+                                      builder: (context) => HomePage()),
+                                  (route) => false);
+                            } else {
+                              pr.dismiss();
+                              showTopSnackBar(
+                                context,
+                                CustomSnackBar.error(
+                                  message:
+                                      "الخادم مشغول , الرجاء المحاولة مجددا",
+                                ),
+                              );
+                            }
+                          } catch (e) {
+                            pr.dismiss();
+
+                            showTopSnackBar(
+                              context,
+                              CustomSnackBar.error(
+                                message: "الخادم مشغول , الرجاء المحاولة مجددا",
+                              ),
+                            );
+                          }
                         }
                       }
                     }
@@ -208,12 +226,12 @@ class _ConfirmPassWordState extends State<ConfirmPassWord> {
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(Icons.arrow_right_outlined),
                       Text(
-                        'رجوع',
+                        'عودة',
                         style: TextStyle(
                             fontSize: 15.sp, fontWeight: FontWeight.normal),
                       ),
+                      Icon(Icons.arrow_right_outlined),
                     ],
                   ),
                   style: ElevatedButton.styleFrom(
@@ -234,6 +252,34 @@ class _ConfirmPassWordState extends State<ConfirmPassWord> {
                 ),
               ],
             ),
+            Row(children: <Widget>[
+              Container(
+                width: 30.sp,
+                child: Checkbox(
+                  checkColor: Colors.white,
+                  activeColor: Colors.green,
+                  value: checkValue,
+                  onChanged: (bool? value) {
+                    setState(() {
+                      checkValue = value!;
+                    });
+                  },
+                ),
+              ),
+              InkWell(
+                onTap: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => Terms()));
+                },
+                child: Container(
+                  child: Text(
+                    
+                    'الموافقة على الشروط والأحكام ',
+                    style: TextStyle(fontSize: 11.sp, color: Colors.grey.shade600),
+                  ),
+                ),
+              ),
+            ])
           ]),
         ),
       ),
