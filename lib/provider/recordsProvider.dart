@@ -6,6 +6,7 @@ import 'package:tell_me/models/QuestionModel.dart';
 import 'package:http_parser/http_parser.dart';
 
 import 'package:tell_me/models/RecordModel.dart';
+import 'package:tell_me/util/const.dart';
 
 class RecordProvider with ChangeNotifier {
   List? records;
@@ -17,19 +18,8 @@ class RecordProvider with ChangeNotifier {
     lottiAnime = value;
     notifyListeners();
   }
+  final Dio dio=TellMeConsts().GetdioX();
 
-  // ignore: unnecessary_new
-  BaseOptions options = new BaseOptions(
-    // baseUrl: "http://192.168.43.250:7000",
-    baseUrl: "https://aboutmetell.com",
-
-    connectTimeout: 20000,
-    receiveTimeout: 20000,
-    contentType: 'application/json',
-    validateStatus: (status) {
-      return status! < 600;
-    },
-  );
 
   getRecords(int i) async {
     // try {
@@ -45,7 +35,6 @@ class RecordProvider with ChangeNotifier {
 
     // print(calendarTime.startOfToday);
 
-    Dio dio = Dio(options);
 
     // Response response = await dio.get("/api/v1/articles", queryParameters: {
     //   'createdAt': {"$gte": "$dayBefore", "\$$lte": "$dayEnd"}
@@ -72,7 +61,6 @@ class RecordProvider with ChangeNotifier {
 
   createRecord(String title, dynamic record, String token) async {
     // try {
-    var dio = Dio(options);
     dio.options.headers["authorization"] = 'Bearer $token';
 
     print(question!.id);

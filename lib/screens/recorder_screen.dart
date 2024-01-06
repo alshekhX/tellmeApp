@@ -102,9 +102,7 @@ class _RecorderScreenState extends State<RecorderScreen> {
         tutorialCoachMark!.next();
         print('onClickOverlay: $target');
       },
-      onSkip: () {
-        print("skip");
-      },
+     
     );
   }
 

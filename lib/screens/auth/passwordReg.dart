@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
-import 'package:tell_me/screens/auth/confirmPassReq.dart';
-import 'package:page_transition/page_transition.dart';
-import 'package:tell_me/screens/auth/userNameReg.dart';
+import 'package:tell_me/screens/auth/controllers/PassRegC.dart';
+import 'package:tell_me/screens/auth/widgets/registrationButton.dart';
 
-import '../../provider/auth.dart';
 
 class PasswordRegistration extends StatefulWidget {
   const PasswordRegistration({Key? key}) : super(key: key);
@@ -15,8 +12,8 @@ class PasswordRegistration extends StatefulWidget {
 }
 
 class _PasswordRegistrationState extends State<PasswordRegistration> {
-  TextEditingController passwordC = TextEditingController();
-  final _formKey = GlobalKey<FormState>();
+PasswordRegistrationController ?controller;
+ 
     bool _showPassword = false;
      void _togglevisibility() {
     setState(() {
@@ -27,9 +24,8 @@ class _PasswordRegistrationState extends State<PasswordRegistration> {
 
 @override
   void initState() {
-    if (Provider.of<AuthProvider>(context, listen: false).password != null) {
-      passwordC.text = Provider.of<AuthProvider>(context, listen: false).password!;
-    }
+    controller=PasswordRegistrationController();
+   
     // TODO: implement initState
     super.initState();
   }
@@ -42,7 +38,7 @@ class _PasswordRegistrationState extends State<PasswordRegistration> {
         padding: EdgeInsets.fromLTRB(10.w, 10.h, 10.w, 5.h),
         // ignore: prefer_const_literals_to_create_immutables
         child: Form(
-          key: _formKey,
+          key: controller!.formKey,
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Text(
@@ -67,7 +63,7 @@ class _PasswordRegistrationState extends State<PasswordRegistration> {
                                                  obscureText: !_showPassword,
                                                  
 
-                controller: passwordC, validator: (value) {
+                controller: controller!.passwordC, validator: (value) {
                   if (value!.isEmpty) {
                     return 'لا تترك هذا الحقل فارغا';
                   }
@@ -107,69 +103,24 @@ class _PasswordRegistrationState extends State<PasswordRegistration> {
             ),
             Row(
               children: [
-                ElevatedButton(
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(Icons.arrow_left_outlined),
-                      Text(
-                        'التالي',
-                        style: TextStyle(
-                            fontSize: 15.sp, fontWeight: FontWeight.normal),
-                      ),
-                    ],
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    elevation: 2,
-                    primary: Color(0xff309489),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(25),
-                      side: BorderSide(width: 1.0, color: Colors.white),
-                    ),
-                  ),
-                  onPressed: () async {
-                    if (_formKey.currentState!.validate()) {
-                       Provider.of<AuthProvider>(context, listen: false).password =
-                      passwordC.text;
-                      Navigator.push(
-                          context,
-                          PageTransition(
-                              type: PageTransitionType.rightToLeft,
-                              child: ConfirmPassWord()));
-                    }
-                  },
-                ),
-                Spacer(),
-                ElevatedButton(
-                  child:Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                        Text(
-                        'عودة',
-                        style: TextStyle(
-                            fontSize: 15.sp, fontWeight: FontWeight.normal),
-                      ),
-                      Icon(Icons.arrow_right_outlined),
-                    
-                    ],
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    elevation: 2,
-                    primary: Color(0xff37474F),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(25),
-                      side: BorderSide(width: 1.0, color: Colors.white),
-                    ),
-                  ),
-                  onPressed: () async {
-                    Navigator.push(
-                        context,
-                        PageTransition(
-                            type: PageTransitionType.rightToLeft,
-                            child: UserNameReg(),
-                            childCurrent: PasswordRegistration()));
-                  },
-                ),
+
+                     RegitrationButton(title: "التالي",
+                color: Color(0xff309489),
+                              iconData: Icons.arrow_left_outlined,
+
+                   onPressed: () async {
+                    controller!.AddPassword(context);
+                  },),
+         
+                  Spacer(),
+
+                      RegitrationButton(title: 'عودة', 
+              iconData: Icons.arrow_right_outlined,
+              
+                onPressed: () async {
+                  controller!.goBackToNameReg(context);
+                     },color: Color(0xff37474F),)
+               
               ],
             ),
           ]),

@@ -1,21 +1,9 @@
-import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_animated_button/flutter_animated_button.dart';
-import 'package:ionicons/ionicons.dart';
-import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:ndialog/ndialog.dart';
-import 'package:page_transition/page_transition.dart';
-import 'package:provider/provider.dart';
 
 import 'package:sizer/sizer.dart';
-import 'package:tell_me/provider/auth.dart';
-import 'package:tell_me/screens/auth/login.dart';
-import 'package:tell_me/screens/auth/passwordReg.dart';
-import 'package:top_snackbar_flutter/custom_snack_bar.dart';
-import 'package:top_snackbar_flutter/top_snack_bar.dart';
-
-import '../classes/colors.dart';
+import 'package:tell_me/screens/auth/controllers/NameRegC.dart';
+import 'package:tell_me/screens/auth/widgets/registrationButton.dart';
 
 class UserNameReg extends StatefulWidget {
   const UserNameReg({Key? key}) : super(key: key);
@@ -25,15 +13,12 @@ class UserNameReg extends StatefulWidget {
 }
 
 class _UserNameRegState extends State<UserNameReg> {
-  final _formKey = GlobalKey<FormState>();
 
-  TextEditingController userC = TextEditingController();
-
+  NameRegistrationController? controller;
   @override
   void initState() {
-    if (Provider.of<AuthProvider>(context, listen: false).userName != null) {
-      userC.text = Provider.of<AuthProvider>(context, listen: false).userName!;
-    }
+    controller = NameRegistrationController(context);
+
     // TODO: implement initState
     super.initState();
   }
@@ -47,7 +32,7 @@ class _UserNameRegState extends State<UserNameReg> {
         padding: EdgeInsets.fromLTRB(10.w, 10.h, 10.w, 5.h),
         // ignore: prefer_const_literals_to_create_immutables
         child: Form(
-          key: _formKey,
+          key: controller!.formKey,
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Text(
@@ -69,7 +54,7 @@ class _UserNameRegState extends State<UserNameReg> {
             ),
             SizedBox(
               child: TextFormField(
-                controller: userC,
+                controller: controller!.userC,
                 validator: (value) {
                   if (value!.isEmpty) {
                     return 'لا تترك هذا الحقل فارغا';
@@ -101,161 +86,29 @@ class _UserNameRegState extends State<UserNameReg> {
             ),
             Row(
               children: [
-                ElevatedButton(
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(Icons.arrow_left_outlined),
-                        Text(
-                          'التالي',
-                          style: TextStyle(
-                              fontSize: 15.sp, fontWeight: FontWeight.normal),
-                        ),
-                      ],
-                    ),
-                    style: ElevatedButton.styleFrom(
-                      elevation: 2,
-                      primary: Color(0xff309489),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(25),
-                        side: BorderSide(width: 1.0, color: Colors.white),
-                      ),
-                    ),
-                    onPressed: () async {
-                      CustomProgressDialog pr = CustomProgressDialog(context,
-                          blur: 30,
-                          loadingWidget: Container(
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  border: Border.all(
-                                      color: Colorss.recorderBackground),
-                                  borderRadius: BorderRadius.circular(20)),
-                              child: Padding(
-                                padding: const EdgeInsets.all(25),
-                                child: LoadingAnimationWidget.staggeredDotsWave(
-                                    color: Colorss.recorderBackground,
-                                    size: 40.sp),
-                              )));
-                      if (_formKey.currentState!.validate()) {
-                        pr.show();
-
-                        String internetConn = await _checkInternetConnection();
-
-                        if (internetConn == 'false') {
-                          pr.dismiss();
-                          setState(() {});
-
-                          showTopSnackBar(
-                            context,
-                            CustomSnackBar.error(
-                              message:
-                                  "تاكد من تشغيل بيانات الهاتف وحاول مجددا",
-                            ),
-                          );
-                        } else {
-                          try {
-                            String res = await Provider.of<AuthProvider>(
-                                    context,
-                                    listen: false)
-                                .checkUserName(userC.text);
-                            print(res);
-                                                      pr.dismiss();
-
-                            if (res == 'success') {
-                              Provider.of<AuthProvider>(context, listen: false)
-                                  .userName = userC.text;
-
-                              Navigator.push(
-                                  context,
-                                  PageTransition(
-                                      type: PageTransitionType.rightToLeft,
-                                      child: PasswordRegistration()));
-                            } else if (res == 'exist') {
-                              pr.dismiss();
-                              showTopSnackBar(
-                                context,
-                                CustomSnackBar.error(
-                                  message: "إسم المستخدم موجود مسبقا",
-                                ),
-                              );
-                            } else {
-                              pr.dismiss();
-
-                              showTopSnackBar(
-                                context,
-                                CustomSnackBar.error(
-                                  message:
-                                      "الخادم مشغول , الرجاء المحاولة مجددا",
-                                ),
-                              );
-                            }
-                          } catch (e) {
-                            pr.dismiss();
-                            print(e);
-
-                            showTopSnackBar(
-                              context,
-                              CustomSnackBar.error(
-                                message: "الخادم مشغول , الرجاء المحاولة مجددا",
-                              ),
-                            );
-                          }
-                        }
-                      }
-                    }),
-                Spacer(),
-                ElevatedButton(
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                        Text(
-                        'عودة',
-                        style: TextStyle(
-                            fontSize: 15.sp, fontWeight: FontWeight.normal),
-                      ),
-                      Icon(Icons.arrow_right_outlined),
-                    
-                    ],
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    elevation: 2,
-                    primary: Color(0xff37474F),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(25),
-                      side: BorderSide(width: 1.0, color: Colors.white),
-                    ),
-                  ),
+                RegitrationButton(
+                  title: "التالي",
+                  color: Color(0xff309489),
+                  iconData: Icons.arrow_left_outlined,
                   onPressed: () async {
-                    Navigator.push(
-                        context,
-                        PageTransition(
-                            type: PageTransitionType.rightToLeft,
-                            child: LoginScreen(),
-                            childCurrent: UserNameReg()));
+                    await controller!.checkUserName(context);
                   },
                 ),
+                Spacer(),
+                RegitrationButton(
+                  title: 'عودة',
+                  iconData: Icons.arrow_right_outlined,
+                  onPressed: () async {
+                                        await controller!.goBackToLogin(context);
+
+                  },
+                  color: Color(0xff37474F),
+                )
               ],
             ),
           ]),
         ),
       ),
     );
-  }
-
-  bool? _isConnected;
-
-  Future<String> _checkInternetConnection() async {
-    try {
-      final response = await InternetAddress.lookup('www.google.com');
-      if (response.isNotEmpty) {
-        setState(() {
-          _isConnected = true;
-        });
-        return 'success';
-      }
-      return 'success';
-    } on SocketException catch (err) {
-      return 'false';
-    }
   }
 }

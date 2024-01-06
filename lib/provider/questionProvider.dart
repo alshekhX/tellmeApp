@@ -3,23 +3,18 @@ import 'package:dio/dio.dart';
 
 import 'package:flutter/material.dart';
 import 'package:tell_me/models/QuestionModel.dart';
+import 'package:tell_me/util/const.dart';
 
 class QuestionProvider with ChangeNotifier {
   List? questions;
   int? curentIndex;
 
   Question? question;
+    final Dio dio=TellMeConsts().GetdioX();
+
 
   // ignore: unnecessary_new
-  BaseOptions options = new BaseOptions(
-    baseUrl: "https://aboutmetell.com",
-    connectTimeout: 150000,
-    receiveTimeout: 150000,
-    contentType: 'application/json',
-    validateStatus: (status) {
-      return status! < 600;
-    },
-  );
+ 
 
   getQuestions() async {
     try {
@@ -35,7 +30,6 @@ class QuestionProvider with ChangeNotifier {
 
       // print(calendarTime.startOfToday);
 
-      Dio dio = Dio(options);
 
       // Response response = await dio.get("/api/v1/articles", queryParameters: {
       //   'createdAt': {"$gte": "$dayBefore", "\$$lte": "$dayEnd"}

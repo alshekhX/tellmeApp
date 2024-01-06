@@ -297,7 +297,7 @@ class _HomePageState extends State<HomePage> {
                         Container(),
                         Card(
                           borderOnForeground: true,
-                          color: Colorss.mainCardBackGround,
+                          color: Colorss().mainCardBackGround,
                           elevation: 4,
                           child: Container(
                             key: cardKey,
@@ -490,9 +490,7 @@ class _HomePageState extends State<HomePage> {
       onClickOverlay: (target) {
         print('onClickOverlay: $target');
       },
-      onSkip: () {
-        print("skip");
-      },
+    
     );
   }
 

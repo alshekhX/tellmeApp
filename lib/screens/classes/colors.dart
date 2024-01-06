@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 class Colorss {
   //homePage
-  static const Color mainCardBackGround = Colors.white;
+   Color mainCardBackGround = Colors.white;
   static const Color mainCardtext = Color(0xff212427);
     static const Color homefloatingbackground =  Color(0xff37474f);
         static const Color homefloatingIcon = Colors.white;

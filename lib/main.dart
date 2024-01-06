@@ -12,6 +12,7 @@ import 'package:tell_me/provider/likesprovider.dart';
 import 'package:tell_me/provider/questionProvider.dart';
 import 'package:tell_me/provider/recordsProvider.dart';
 import 'package:tell_me/screens/auth/login.dart';
+import 'package:tell_me/screens/auth/userNameReg.dart';
 import 'package:tell_me/screens/home_Page.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
@@ -66,6 +67,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    
     // ignore: prefer_const_constructors
     return Sizer(builder: (context, orientation, deviceType) {
       return MaterialApp(
@@ -85,7 +87,7 @@ class MyApp extends StatelessWidget {
               backgroundColor: Colors.white,
             )),
         title: 'Tell Me',
-        home: MyHomePage(),
+        home: UserNameReg(),
       );
     });
   }

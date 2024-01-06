@@ -46,7 +46,11 @@ class _LoginScreenState extends State<LoginScreen> {
         return 'success';
       }
       return 'success';
-    } on SocketException catch (err) {
+    } 
+
+    on
+
+     SocketException catch (err) {
       return 'false';
     }
   }
@@ -148,7 +152,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: Text(
                         'سجل دخولك',
                         style: TextStyle(
-                            fontSize: 15.sp, fontWeight: FontWeight.normal),
+                            fontSize: 15.sp, fontWeight: FontWeight.normal,color: Colors.white),
                       ),
                       style: ElevatedButton.styleFrom(
                         elevation: 2,

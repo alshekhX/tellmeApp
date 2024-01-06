@@ -1,9 +1,8 @@
-
 import 'package:dio/dio.dart';
 
 import 'package:flutter/material.dart';
 import 'package:tell_me/models/QuestionModel.dart';
-
+import 'package:tell_me/util/const.dart';
 
 class LikesProvider with ChangeNotifier {
   List? likes;
@@ -16,15 +15,6 @@ class LikesProvider with ChangeNotifier {
   // }
 
   // ignore: unnecessary_new
-  BaseOptions options = new BaseOptions(
-    baseUrl: "https://aboutmetell.com",
-    connectTimeout: 20000,
-    receiveTimeout: 20000,
-    contentType: 'application/json',
-    validateStatus: (status) {
-      return status! < 600;
-    },
-  );
 
   // getRecords() async {
   //   // try {
@@ -65,14 +55,14 @@ class LikesProvider with ChangeNotifier {
   //   //   return e.toString();
   //   // }
   // }
+    final Dio dio=TellMeConsts().GetdioX();
+
 
   likeRecord(String recordId, String token) async {
     // try {
-    var dio = Dio(options);
     dio.options.headers["authorization"] = 'Bearer $token';
 
     String url = '/api/v1/like/$recordId';
-   
 
     Response response = await dio.post(url);
     print(response.data);
@@ -86,15 +76,14 @@ class LikesProvider with ChangeNotifier {
     // }
   }
 
-   reportRecord(String recordId,String title, String token) async {
+  reportRecord(String recordId, String title, String token) async {
     // try {
-    var dio = Dio(options);
     dio.options.headers["authorization"] = 'Bearer $token';
 
     String url = '/api/v1/report';
-   
 
-    Response response = await dio.post(url,data: {"record":recordId,"title":title});
+    Response response =
+        await dio.post(url, data: {"record": recordId, "title": title});
     print(response.data);
     if (response.statusCode == 201) {
       return 'success';
