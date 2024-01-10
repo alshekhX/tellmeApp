@@ -27,7 +27,6 @@ class _LoginScreenState extends State<LoginScreen> {
   TextEditingController passwordC = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
-  bool? _isConnected;
 
   GlobalKey cardKey = GlobalKey();
   GlobalKey buttonKey = GlobalKey();
@@ -41,7 +40,6 @@ class _LoginScreenState extends State<LoginScreen> {
       final response = await InternetAddress.lookup('www.google.com');
       if (response.isNotEmpty) {
         setState(() {
-          _isConnected = true;
         });
         return 'success';
       }
