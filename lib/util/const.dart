@@ -5,10 +5,10 @@ import 'package:sizer/sizer.dart';
 
 class TellMeConsts {
   // ignore: non_constant_identifier_names
-    static String localBaseUrL =  "http://192.168.235.52:7000/";
+    static String localBaseUrL =  "http://192.168.254.52:7000/";
 
   static String NetworkBaseUrL =  "https://aboutmetell.com";
-  static String BasePicUrl = 'http://192.168.118.52:8000/uploads/photos/';
+  static String BasePicUrl = 'http://192.168.118.254:8000/uploads/photos/';
 
   BaseOptions option = BaseOptions(
     baseUrl: localBaseUrL,

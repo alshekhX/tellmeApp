@@ -124,47 +124,6 @@ class _SplashScreenState extends State<SplashScreen> {
               ],
             )
 
-//           Column(
-//             crossAxisAlignment: CrossAxisAlignment.center,
-//             mainAxisAlignment: MainAxisAlignment.center,
-//             mainAxisSize: MainAxisSize.max,
-//             children: [
-
-//              Container(
-//               width: 60.w,
-//               child: Image.asset(                                        'assets/images/tellsplash.png',
-// ),
-//              ),
-
-//               Container(
-//                 child: Text('Tell ME',
-//                     style: TextStyle(
-//                             fontSize: 25.sp,
-//                             color: Colors.black,
-//                             fontWeight: FontWeight.w900)),
-//               ),
-//               SizedBox(height: 2.h),
-//               Container(
-
-//                 child: Center(
-//                   child: Text('Tell your story and Listen to others',
-//                       style: TextStyle(
-//                               fontSize: 15.sp,
-//                               color: Colors.grey.shade500,
-//                               fontWeight: FontWeight.w600)),
-//                 ),
-//               ),
-//               SizedBox(
-//                 height: 2.h,
-//               ),
-
-//               SizedBox(
-//                 height: 1.h,
-//               ),
-//               SizedBox(height: 8.h),
-//             ],
-//           ),
-
             ),
       ),
     );

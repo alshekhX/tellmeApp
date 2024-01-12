@@ -1,4 +1,3 @@
-
 import 'package:dio/dio.dart';
 
 import 'package:flutter/material.dart';
@@ -10,11 +9,9 @@ class QuestionProvider with ChangeNotifier {
   int? curentIndex;
 
   Question? question;
-    final Dio dio=TellMeConsts().GetdioX();
-
+  final Dio dio = TellMeConsts().GetdioX();
 
   // ignore: unnecessary_new
- 
 
   getQuestions() async {
     try {
@@ -30,7 +27,6 @@ class QuestionProvider with ChangeNotifier {
 
       // print(calendarTime.startOfToday);
 
-
       // Response response = await dio.get("/api/v1/articles", queryParameters: {
       //   'createdAt': {"$gte": "$dayBefore", "\$$lte": "$dayEnd"}
       // });
@@ -43,6 +39,7 @@ class QuestionProvider with ChangeNotifier {
         final map = response.data['data'];
 
         questions = map.map((i) => Question.fromMap(i)).toList();
+        notifyListeners();
         // DateTime
         return 'success';
       } else {

@@ -8,7 +8,7 @@ import 'package:sizer/sizer.dart';
 import 'package:tell_me/provider/auth.dart';
 import 'package:tell_me/screens/auth/passwordReg.dart';
 import 'package:tell_me/screens/classes/colors.dart';
-import 'package:tell_me/screens/home_Page.dart';
+import 'package:tell_me/screens/homePage.dart/home_Page.dart';
 import 'package:tell_me/util/const.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';

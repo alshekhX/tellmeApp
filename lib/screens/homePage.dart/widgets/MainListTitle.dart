@@ -12,11 +12,12 @@ import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import 'package:tell_me/provider/auth.dart';
 import 'package:tell_me/provider/likesprovider.dart';
+import 'package:tell_me/util/const.dart';
 
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
-import '../classes/colors.dart';
+import '../../classes/colors.dart';
 
 class AudioListTile extends StatefulWidget {
   final String type;
@@ -64,7 +65,7 @@ class _AudioListTileState extends State<AudioListTile> {
   plaayRecord() async {
     await player!.setUrl(
         // Load a URL
-        "https://aboutmetell.com/uploads/audio/${widget.record}",
+        TellMeConsts.localBaseUrL+"/uploads/audio/${widget.record}",
         preload: false);
     return player;
   }

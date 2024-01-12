@@ -13,7 +13,7 @@ import 'package:tell_me/provider/questionProvider.dart';
 import 'package:tell_me/provider/recordsProvider.dart';
 import 'package:tell_me/screens/auth/login.dart';
 import 'package:tell_me/screens/auth/userNameReg.dart';
-import 'package:tell_me/screens/home_Page.dart';
+import 'package:tell_me/screens/homePage.dart/home_Page.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:tell_me/screens/introScreen.dart';
@@ -87,7 +87,7 @@ class MyApp extends StatelessWidget {
               backgroundColor: Colors.white,
             )),
         title: 'Tell Me',
-        home: UserNameReg(),
+        home: MyHomePage(),
       );
     });
   }

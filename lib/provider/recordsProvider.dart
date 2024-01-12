@@ -22,23 +22,7 @@ class RecordProvider with ChangeNotifier {
 
 
   getRecords(int i) async {
-    // try {
-    // String gte = 'gte';
-    // String lte = 'lte';
-
-    // //Dio option config
-
-    // var calendarTime = CalendarTime(DateTime.now());
-
-    // var dayBefore = calendarTime.startOfToday.subtract(Duration(days: 1));
-    // var dayEnd = calendarTime.endOfToday;
-
-    // print(calendarTime.startOfToday);
-
-
-    // Response response = await dio.get("/api/v1/articles", queryParameters: {
-    //   'createdAt': {"$gte": "$dayBefore", "\$$lte": "$dayEnd"}
-    // });
+    
 
     Response response = await dio.get("/api/v1/record",
         queryParameters: {"page": i, "question": question!.id});
