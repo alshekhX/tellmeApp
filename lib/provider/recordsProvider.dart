@@ -26,7 +26,6 @@ class RecordProvider with ChangeNotifier {
 
     Response response = await dio.get("/api/v1/record",
         queryParameters: {"page": i, "question": question!.id});
-    print(response.data);
     if (response.statusCode == 200) {
       final map = response.data['data'];
 

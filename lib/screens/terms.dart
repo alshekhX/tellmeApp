@@ -6,16 +6,16 @@ import 'package:webview_flutter/webview_flutter.dart';
 import 'classes/colors.dart';
 
 class Terms extends StatefulWidget {
-  const Terms({ Key? key }) : super(key: key);
+  const Terms({Key? key}) : super(key: key);
 
   @override
   State<Terms> createState() => _TermsState();
 }
 
 class _TermsState extends State<Terms> {
-    bool isLoading = true;
+  bool isLoading = true;
 
-   @override
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -28,29 +28,25 @@ class _TermsState extends State<Terms> {
         ),
       ),
       body: Container(
-        
-        child:   Stack(
+        child: Stack(
           children: [
             WebView(
-             initialUrl: 'https://www.app-privacy-policy.com/live.php?token=vl39CeR62GnvR836JxiCGMU3rFLu7lUw',
-                    onPageFinished: (finish) {
-                    setState(() {
-                      isLoading = false;
-                    });
-                  }, ),
-                   isLoading
+              initialUrl:
+                  'https://www.app-privacy-policy.com/live.php?token=vl39CeR62GnvR836JxiCGMU3rFLu7lUw',
+              onPageFinished: (finish) {
+                setState(() {
+                  isLoading = false;
+                });
+              },
+            ),
+            isLoading
                 ? Center(
-                    child:  LoadingAnimationWidget
-                                                                .beat(
-                                                                    color: Colorss
-                                                                        .recorderBackground,
-                                                                    size:
-                                                                        40.sp),
+                    child: LoadingAnimationWidget.beat(
+                        color: Colorss.recorderBackground, size: 40.sp),
                   )
                 : Stack()
           ],
         ),
-        
       ),
     );
   }

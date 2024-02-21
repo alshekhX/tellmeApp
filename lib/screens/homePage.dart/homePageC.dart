@@ -112,7 +112,7 @@ class HomePageController {
 
 
   void dispose() {
-    tutorialCoachMark!.skip();
+    // tutorialCoachMark!.skip();
     cardKey.currentState!.deactivate();
     listKey.currentState!.deactivate();
     floatingbuttonkey.currentState!.deactivate();

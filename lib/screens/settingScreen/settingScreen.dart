@@ -1,22 +1,15 @@
+import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
-
-import 'package:google_fonts/google_fonts.dart';
 
 import 'package:in_app_update/in_app_update.dart';
 import 'package:ionicons/ionicons.dart';
-import 'package:ndialog/ndialog.dart';
-import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 import 'package:tell_me/screens/classes/colors.dart';
 import 'package:tell_me/screens/rulesScreen.dart';
 import 'package:tell_me/screens/settingScreen/settingsScreenC.dart';
 import 'package:tell_me/screens/settingScreen/widgets/SettingsTile.dart';
 import 'package:tell_me/screens/terms.dart';
-import '../../provider/auth.dart';
-import 'package:about/about.dart';
-import '../auth/login.dart';
 
 class Settings extends StatefulWidget {
   const Settings({Key? key}) : super(key: key);
@@ -57,7 +50,7 @@ class _SettingsState extends State<Settings> {
         ),
       ),
       body: Container(
-        padding: EdgeInsets.symmetric(horizontal: 5.h),
+        padding: EdgeInsets.symmetric(horizontal: 10.w),
         child: Column(
           children: [
             SettingTile(
@@ -80,23 +73,23 @@ class _SettingsState extends State<Settings> {
               title: "عن التطبيق",
               iconData: Ionicons.information_circle_outline,
               onTap: () async {
-             controller.showAboutApp(context);
+                controller.showAboutApp(context);
               },
             ),
             SettingTile(
               title: 'سياسة الخصوصية',
               iconData: Ionicons.person_circle_outline,
               onTap: () {
-                Navigator.push(
-                    context, MaterialPageRoute(builder: (context) => Rules()));
+               
+                Beamer.of(context).beamToNamed('/settings/rules');
               },
             ),
             SettingTile(
               title: ' الشروط والأحكام',
               iconData: Ionicons.checkmark_circle_outline,
               onTap: () async {
-                Navigator.push(
-                    context, MaterialPageRoute(builder: (context) => Terms()));
+                                Beamer.of(context).beamToNamed('/settings/terms');
+
               },
             ),
             SettingTile(

@@ -1,6 +1,5 @@
 import 'dart:io';
 
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
@@ -65,7 +64,7 @@ class _AudioListTileState extends State<AudioListTile> {
   plaayRecord() async {
     await player!.setUrl(
         // Load a URL
-        TellMeConsts.localBaseUrL+"/uploads/audio/${widget.record}",
+        TellMeConsts.localBaseUrL + "/uploads/audio/${widget.record}",
         preload: false);
     return player;
   }
@@ -157,12 +156,13 @@ class _AudioListTileState extends State<AudioListTile> {
                                 setState(() {});
 
                                 showTopSnackBar(
-                                  context,
-                                  CustomSnackBar.error(
-                                    message:
-                                        "تاكد من تشغيل بيانات الهاتف وحاول مجددا",
-                                  ),displayDuration: Duration(milliseconds: 1500)
-                                );
+                                    context,
+                                    CustomSnackBar.error(
+                                      message:
+                                          "تاكد من تشغيل بيانات الهاتف وحاول مجددا",
+                                    ),
+                                    displayDuration:
+                                        Duration(milliseconds: 1500));
                               } else {
                                 hide = false;
                                 player!.seek(Duration(seconds: 0));
@@ -178,7 +178,7 @@ class _AudioListTileState extends State<AudioListTile> {
                               backgroundColor: Colors.white,
                               radius: 18.sp,
                               child: Padding(
-                                padding:  EdgeInsets.all(2.sp),
+                                padding: EdgeInsets.all(2.sp),
                                 child: Image.asset(
                                   'assets/images/mic.png',
                                 ),
@@ -221,7 +221,6 @@ class _AudioListTileState extends State<AudioListTile> {
                               content: Form(
                                 key: formkey,
                                 child: Container(
-                                
                                   child: TextFormField(
                                     validator: (value) {
                                       if (value!.isEmpty) {
@@ -229,17 +228,16 @@ class _AudioListTileState extends State<AudioListTile> {
                                       }
                                     },
                                     controller: titleC,
-                                   
                                     decoration: InputDecoration(
-                               
                                         contentPadding: EdgeInsets.symmetric(
                                             vertical: 0, horizontal: 2.w),
                                         enabledBorder: OutlineInputBorder(
                                           borderSide: BorderSide(
-                                              color: Colors.grey.withOpacity(.6),
+                                              color:
+                                                  Colors.grey.withOpacity(.6),
                                               width: 1),
                                         ),
-                                        labelText:         " سبب التبليغ",
+                                        labelText: " سبب التبليغ",
                                         labelStyle: GoogleFonts.tajawal(
                                             fontSize: 10.sp,
                                             color: Color(0xffB9B9B9),
@@ -340,7 +338,8 @@ class _AudioListTileState extends State<AudioListTile> {
                             ).show(context);
                           },
                           child: Padding(
-                            padding:  EdgeInsets.only(right: 5.sp,top: 2.sp,bottom: 2.sp),
+                            padding: EdgeInsets.only(
+                                right: 5.sp, top: 2.sp, bottom: 2.sp),
                             child: Image.asset(
                               'assets/images/red_card1.png',
                               height: 18.sp,
@@ -453,7 +452,6 @@ class _AudioListTileState extends State<AudioListTile> {
 
   bool? _isConnected;
 
-  
   Future<String> _checkInternetConnection() async {
     try {
       final response = await InternetAddress.lookup('www.google.com');
@@ -468,5 +466,4 @@ class _AudioListTileState extends State<AudioListTile> {
       return 'false';
     }
   }
-
 }

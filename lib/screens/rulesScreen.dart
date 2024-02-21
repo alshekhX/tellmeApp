@@ -37,14 +37,10 @@ class _RulesState extends State<Rules> {
                 });
               },
             ),
-              isLoading
+            isLoading
                 ? Center(
-                    child:  LoadingAnimationWidget
-                                                                .beat(
-                                                                    color: Colorss
-                                                                        .recorderBackground,
-                                                                    size:
-                                                                        40.sp),
+                    child: LoadingAnimationWidget.beat(
+                        color: Colorss.recorderBackground, size: 40.sp),
                   )
                 : Stack()
           ],

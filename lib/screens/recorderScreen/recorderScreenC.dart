@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_sound/flutter_sound.dart';
@@ -180,7 +181,6 @@ class RecorderScreenRController {
 
     if (res == 'success') {
       Navigator.pop(context);
-
       alertDialog('تمت العملية', "تم رفع تسجيلك بنجاح ", true, context);
     } else {
       Navigator.pop(context);
@@ -256,8 +256,7 @@ class RecorderScreenRController {
           trailingIcon:
               Icon(Ionicons.log_out_outline, color: Colors.grey.shade700),
           onPressed: () async {
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => Settings()));
+            Beamer.of(context).beamToNamed('/settings', beamBackOnPop: true);
           }),
     );
 
@@ -468,12 +467,13 @@ class RecorderScreenRController {
                   style: GoogleFonts.tajawal(color: Color(0xff00A4EA)),
                 ),
                 onPressed: () {
-                  Navigator.pushReplacement(
-                      context,
-                      PageTransition(
-                          type: PageTransitionType.fade,
-                          child: HomePage(),
-                          childCurrent: RecorderScreen()));
+                  // Navigator.pushReplacement(
+                  //     context,
+                  //     PageTransition(
+                  //         type: PageTransitionType.fade,
+                  //         child: HomePage(),
+                  //         childCurrent: RecorderScreen()));
+                  Beamer.of(context).beamToReplacementNamed('/home');
                 })
             : Container(),
       ],

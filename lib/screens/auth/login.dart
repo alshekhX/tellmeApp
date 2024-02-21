@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:ndialog/ndialog.dart';
@@ -214,10 +215,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                                 pr.dismiss();
 
-                                Navigator.of(context).pushAndRemoveUntil(
-                                    MaterialPageRoute(
-                                        builder: (context) => HomePage()),
-                                    (route) => false);
+                               Beamer.of(context).beamToReplacementNamed('/home',popToNamed: '/');
                               } else if (res == '400') {
                                 pr.dismiss();
                                 showTopSnackBar(

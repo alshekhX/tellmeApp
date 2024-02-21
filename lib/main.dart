@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:beamer/beamer.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -12,7 +13,6 @@ import 'package:tell_me/provider/likesprovider.dart';
 import 'package:tell_me/provider/questionProvider.dart';
 import 'package:tell_me/provider/recordsProvider.dart';
 import 'package:tell_me/screens/auth/login.dart';
-import 'package:tell_me/screens/auth/userNameReg.dart';
 import 'package:tell_me/screens/homePage.dart/home_Page.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
@@ -20,6 +20,7 @@ import 'package:tell_me/screens/introScreen.dart';
 import 'package:tell_me/screens/splashScreen.dart';
 import 'package:tell_me/util/ad_helper.dart';
 import 'package:tell_me/util/pushNoti.dart';
+import 'package:tell_me/util/routes.dart';
 
 AppOpenAd? myAppOpenAd;
 
@@ -67,10 +68,12 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    
     // ignore: prefer_const_constructors
     return Sizer(builder: (context, orientation, deviceType) {
-      return MaterialApp(
+      return MaterialApp.router(
+        
+        routerDelegate: TellMeRoutes.routerDelegate,
+        routeInformationParser: BeamerParser(),
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
         locale: const Locale('ar'),
@@ -87,7 +90,6 @@ class MyApp extends StatelessWidget {
               backgroundColor: Colors.white,
             )),
         title: 'Tell Me',
-        home: MyHomePage(),
       );
     });
   }
@@ -115,18 +117,16 @@ class _MyHomePageState extends State<MyHomePage> {
   SharedPreferences? prefs;
 
   //pushnotification
-   String notificationTitle = 'No Title';
+  String notificationTitle = 'No Title';
   String notificationBody = 'No Body';
   String notificationData = 'No Data';
 
-
   @override
   void initState() {
-
     //notiii
     final firebaseMessaging = FCM();
     firebaseMessaging.setNotifications();
-    
+
     firebaseMessaging.streamCtlr.stream.listen(_changeData);
     firebaseMessaging.bodyCtlr.stream.listen(_changeBody);
     firebaseMessaging.titleCtlr.stream.listen(_changeTitle);
@@ -135,7 +135,6 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
   }
 
-
   //notiiiii
   _changeData(String msg) => setState(() => notificationData = msg);
   _changeBody(String msg) => setState(() => notificationBody = msg);
@@ -143,18 +142,13 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
       body: FutureBuilder(
         future: verifyuserToken(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             print(firstTime);
+
             if (firstTime == true) {
               return IntroScreen();
             } else if (alredyLogged == true) {
@@ -177,26 +171,11 @@ class _MyHomePageState extends State<MyHomePage> {
 
       SharedPreferences prefs = await SharedPreferences.getInstance();
       print(prefs.getString('first'));
-      if (prefs.getString('first')==null) {
+      if (prefs.getString('first') == null) {
         firstTime = true;
 
         prefs.setString('first', 'in');
       }
-
-
-      // if (prefs!.getString('username') != null) {
-      //   print((prefs!.getString('username')));
-
-      //   Provider.of<AuthProvider>(context, listen: false).user =
-      //       MainUser(name: prefs!.getString('username'));
-      //   print(Provider.of<AuthProvider>(context, listen: false).user!.name);
-      // }
-      // if (prefs!.getString('userid') != null) {
-      //   Provider.of<AuthProvider>(context, listen: false).user!.id =
-      //       prefs!.getString('userid');
-
-      //   print(Provider.of<AuthProvider>(context, listen: false).user!.name);
-      // }
 
       if (prefs.getString('userToken') != null) {
         Provider.of<AuthProvider>(context, listen: false).token =
@@ -219,7 +198,6 @@ class _MyHomePageState extends State<MyHomePage> {
           alredyLogged = false;
         }
       } else {
-        
         alredyLogged = false;
       }
     } catch (e) {

@@ -1,33 +1,20 @@
-import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
-import 'package:auto_size_text/auto_size_text.dart';
+import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_sound/flutter_sound.dart';
-import 'package:focused_menu/focused_menu.dart';
-import 'package:focused_menu/modals.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:ndialog/ndialog.dart';
-import 'package:page_transition/page_transition.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 import 'package:lottie/lottie.dart';
-import 'package:tell_me/models/RecordModel.dart';
 import 'package:tell_me/provider/recordsProvider.dart';
-import 'package:tell_me/provider/settingProvider.dart';
-import 'package:tell_me/screens/auth/login.dart';
 import 'package:tell_me/screens/classes/colors.dart';
-import 'package:tell_me/screens/homePage.dart/home_Page.dart';
 import 'package:tell_me/screens/recorderScreen/recorderScreenC.dart';
-import 'package:tell_me/screens/settingScreen/settingScreen.dart';
-import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
 import '../../provider/auth.dart';
 
@@ -128,12 +115,19 @@ class _RecorderScreenState extends State<RecorderScreen> {
                               child: InkWell(
                                 key: controller.lllistKey,
                                 onTap: () {
-                                  Navigator.pushReplacement(
-                                      context,
-                                      PageTransition(
-                                          type: PageTransitionType.topToBottom,
-                                          child: HomePage(),
-                                          childCurrent: RecorderScreen()));
+
+
+
+                                  // Navigator.pushReplacement(
+                                  //     context,
+                                  //     PageTransition(
+                                  //         type: PageTransitionType.topToBottom,
+                                  //         child: HomePage(),
+                                  //         childCurrent: RecorderScreen()));
+                                  
+                        
+                                  Beamer.of(context).beamToNamed('/home');
+
                                 },
                                 child: Padding(
                                   padding: EdgeInsets.all(15.sp),

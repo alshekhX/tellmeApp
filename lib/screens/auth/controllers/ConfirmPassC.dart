@@ -1,3 +1,4 @@
+import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:ndialog/ndialog.dart';
@@ -72,10 +73,8 @@ class PassConfirmRegistrationController {
                   Provider.of<AuthProvider>(context, listen: false).token!);
 
               pr.dismiss();
+              Beamer.of(context).beamToNamed('/home',popToNamed: '/');
 
-              Navigator.of(context).pushAndRemoveUntil(
-                  MaterialPageRoute(builder: (context) => HomePage()),
-                  (route) => false);
             } else {
               pr.dismiss();
               showTopSnackBar(

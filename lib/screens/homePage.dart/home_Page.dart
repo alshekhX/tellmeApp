@@ -1,14 +1,12 @@
-import 'dart:math';
 import 'dart:ui';
 
+import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-import 'package:lottie/lottie.dart';
 import 'package:ndialog/ndialog.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
@@ -18,8 +16,6 @@ import 'package:tell_me/provider/questionProvider.dart';
 import 'package:tell_me/provider/recordsProvider.dart';
 import 'package:tell_me/screens/homePage.dart/homePageC.dart';
 import 'package:tell_me/screens/recorderScreen/recorder_screen.dart';
-import 'package:tell_me/screens/homePage.dart/widgets/MAinListShimmer.dart';
-import 'package:tell_me/screens/homePage.dart/widgets/MainListTitle.dart';
 
 import '../../models/User.dart';
 import '../classes/colors.dart';
@@ -104,12 +100,14 @@ class _HomePageState extends State<HomePage> {
             print(Provider.of<RecordProvider>(context, listen: false)
                 .question!
                 .id);
-            await Navigator.pushReplacement(
-                context,
-                PageTransition(
-                    type: PageTransitionType.bottomToTop,
-                    child: const RecorderScreen(),
-                    childCurrent: const HomePage()));
+Beamer.of(context).beamToNamed('/recorder');
+
+            // await Navigator.pushReplacement(
+            //     context,
+            //     PageTransition(
+            //         type: PageTransitionType.bottomToTop,
+            //         child: const RecorderScreen(),
+            //         childCurrent: const HomePage()));
           },
           child: Icon(
             Ionicons.mic,
